@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import t from 'tcomb-form-native';
 import { StyleSheet,
   Text,
   View,
@@ -10,24 +9,11 @@ TouchableOpacity,
 Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-const Form = t.form.Form;
-
-const User = t.struct({
-  email: t.String,
-  username: t.String,
-  password: t.String,
-  terms: t.Boolean
-});
-
 const Pick = () => {
-  handleSubmit = () => {
-    const value = refs.form.getValue(); // use that ref to get the form value
-    console.log('value: ', value);
-  }
   // const [currency, setCurrency] = useState('US Dollar');
   return (
     <View >
-      <Text style={styles.form}> Demo Form </Text>
+      <Text style={styles.form}>  </Text>
       <View>
         {/* <TextInput style={styles.email}
           placeholder="Email" />
@@ -35,13 +21,16 @@ const Pick = () => {
           secureTextEntry={true}
           placeholder="Password"
         /> */}
-        <Form style={styles.form} type={User} />
-        <TouchableOpacity onPress={() => console.log('Someone pressed it.')}>
+
+
+        {/* <TouchableOpacity onPress={() => console.log('Someone pressed it.')}>
           <Button
               title="Sign Up!"
               onPress={this.handleSubmit}
             />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+
         {/* <Picker style={styles.demoForm}
           selectedValue={currency}
           onValueChange={currentCurrency => setCurrency(currentCurrency)}>
