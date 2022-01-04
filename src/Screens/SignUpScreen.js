@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import * as Keychain from 'react-native-keychain';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
 import { StatusBar } from 'expo-status-bar';
@@ -25,13 +26,68 @@ const SignUpScreen = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordRepeat, setPasswordRepeat] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState([]);
+  
+  //  ERRORS
+  const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  // const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
   const navigation = useNavigation();
 
-  const onRegister = () => {
-    // console.warn('Sign In');
+ const onRegister = async () => {
+    if (username.trim() === '') {
+      setUsernameError( 'A username is required.');
+      console.log(usernameError);
+    }if (email.trim() === '') {
+      setEmailError( 'An email is required.');
+      console.log(emailError);
+    }if (password.trim() === '') {
+      setPasswordError( 'A Password is required.');
+      console.log(passwordError);
+    }else{
+      setUsernameError('');
+      setEmailError('');
+      setPasswordError('');
+
+    try{
+      let response = await fetch('http://21cf-72-252-198-169.ngrok.io/api/v1/sign_up', {
+        // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
+        method: 'Post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user: {
+            username: username,
+            email: email,
+            password: password,
+            // confirmPassword: confirmPassword
+          }
+        })
+      });
+
+      let res = await response.text();
+
+      if(response.status >= 200 && response.status < 300) {
+        console.log('res is successful: ' + res);
+        const rawValue = JSON.stringify(res);
+        await Keychain.setGenericPassword('session', rawValue);
+      }else{
+        let errors = res;
+        throw errors;
+      }
+    }
+
+    catch (errors) {
+      console.log('errors caught: ' + errors);
+    }
+
     navigation.navigate('ConfirmEmailScreen');
+  }
   };
 
   const onTermsOfUse = () => {
@@ -65,22 +121,44 @@ const SignUpScreen = () => {
       <ScrollView style={{width: "100%"}} contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
           <Text style={styles.title}>{'Create An Account'}</Text>
-          <FieldInput placeholder='Username' value={username} setValue={setUsername}/>
-          <FieldInput placeholder='Email' value={email} setValue={setEmail}/>
-          <FieldInput placeholder='Password' value={password} setValue={setPassword} secureTextEntry/>
-          <FieldInput placeholder='PasswordRepeat' value={passwordRepeat} setValue={setPasswordRepeat} secureTextEntry/>
 
-          <CustomButton
-            text='Register'
-            onPress={onRegister}
-          />
+          <FieldInput Error={usernameError} placeholder='Username' value={username} setValue={setUsername}/>
+          {!!usernameError && (
+            <Text style={{color: 'red'}}>
+              {usernameError}
+            </Text>
+          )}
+
+          <FieldInput Error={emailError} placeholder='Email' value={email} setValue={setEmail}/>
+          {!!emailError && (
+            <Text style={{color: 'red'}}>
+              {emailError}
+            </Text>
+          )}
+
+          <FieldInput Error={passwordError} placeholder='Password' value={password} setValue={setPassword} secureTextEntry/>
+          {!!passwordError && (
+            <Text style={{color: 'red'}}>
+              {passwordError}
+            </Text>
+          )}
+          {/* <FieldInput placeholder='Confirm Password' value={confirmPassword} setValue={setConfirmPassword} secureTextEntry/> */}
+
+            <CustomButton
+              text='Register'
+              onPress={onRegister}
+            />
+
           <Text style={styles.policy}>By Registering, you confirm that you accept our <Text style={styles.link} onPress={onTermsOfUse}>Terms Of Use</Text> and <Text style={styles.link} onPress={onPrivacyPolicy}>Privacy Policy</Text></Text>
-          <SocialSignIn />
-          <CustomButton
-            text='Already have an account? Sign In.'
-            onPress={onSignIn}
-            type='TERTIARY'
-          />
+
+          {/* <SocialSignIn /> */}
+
+            <CustomButton
+              text='Already have an account? Sign In.'
+              onPress={onSignIn}
+              type='TERTIARY'
+            />
+
         </View>
       </ScrollView>
     )
@@ -94,13 +172,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // marginTop: '30%',
     backgroundColor: 'black',
-
   },
 
   title: {
     color: 'lightgray',
     textAlign: 'center',
-    marginBottom: '10%',
+    marginBottom: '20%',
     marginTop: '25%',
     fontSize: 30,
     fontWeight: 'bold',

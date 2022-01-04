@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import * as Keychain from 'react-native-keychain';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
 import { StatusBar } from 'expo-status-bar';
@@ -20,19 +21,70 @@ import SocialSignIn from "../components/SocialSignIn";
 import { useNavigation } from "@react-navigation/native";
 
 const Login2 = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // ERRORS
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const {height} = useWindowDimensions();
   const {width} = useWindowDimensions();
 
   const navigation = useNavigation();
 
-  const onSignIn = () => {
+  const onSignIn = async () => {
+    if (email.trim() === '') {
+      setEmailError( 'An email is required.');
+      console.log(emailError);
+    }if (password.trim() === '') {
+      setPasswordError( 'A Password is required.');
+      console.log(passwordError);
+    }else{
+      setEmailError( '');
+      setPasswordError( '');
+      try{
+        // sessionStorage.setItem('CurrentUser', JSON.stringify(data));
+        // const token = JSON.parse(sessionStorage.getItem('CurrentUser')) || '';
+        // const credential = await Keychain.getGenericPassword();
+        // const token = JSON.parse(credential.jwt)
+        let response = await fetch('http://21cf-72-252-198-169.ngrok.io/api/v1/login', {
+          // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
+          method: 'Post',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            // 'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+              // username: 'pc@gmail.com' ,
+              email: email,
+              password: password,
+              // confirmPassword: confirmPassword
+          })
+        });
+
+        let res = await response.text();
+
+        if(response.status >= 200 && response.status < 300) {
+
+          console.log('res is successful: ' + res);
+          navigation.navigate('HomeScreen');
+        }else{
+          let errors = res;
+          throw errors;
+        }
+      }
+
+      catch (errors) {
+        // console.warn('errors caught: ' + errors);
+        // console.warn('This is an error: ' + errors);
+        console.log('errors caught: ' + errors);
+      }
+    }
     // console.warn('Sign In');
     // TODO: VALIDATION WITH BACK END BEFORE GOING TO THE NEXT SCREEN
 
-    navigation.navigate('HomeScreen');
+    // navigation.navigate('HomeScreen');
   };
 
   const onSignInWithGoogle = () => {
@@ -73,8 +125,19 @@ const Login2 = () => {
           >
           </Image>
 
-          <FieldInput placeholder='Username' value={username} setValue={setUsername}/>
-          <FieldInput placeholder='Password' value={password} setValue={setPassword} secureTextEntry/>
+          <FieldInput Error={emailError} placeholder='Email' value={email} setValue={setEmail}/>
+          {!!emailError && (
+            <Text style={{color: 'red'}}>
+              {emailError}
+            </Text>
+          )}
+
+          <FieldInput Error={passwordError} placeholder='Password' value={password} setValue={setPassword} secureTextEntry/>
+          {!!passwordError && (
+            <Text style={{color: 'red'}}>
+              {passwordError}
+            </Text>
+          )}
 
           <CustomButton
             text='Sign In'
@@ -85,7 +148,9 @@ const Login2 = () => {
             onPress={onForgotPassword}
             type='TERTIARY'
            />
-          <SocialSignIn />
+
+          {/* <SocialSignIn /> */}
+
           <CustomButton
             text='Dont have an account? Create one.'
             onPress={onSignUp}

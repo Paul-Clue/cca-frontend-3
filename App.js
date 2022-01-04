@@ -15,7 +15,8 @@ import {
   Image,
   TouchableOpacity,
   useWindowDimensions,
-  Button
+  Button,
+  AppRegistry,
 } from 'react-native';
 
 // import Picker from './src/components/Picker';
@@ -50,3 +51,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9FBFC'
   }
 });
+
+AppRegistry.registerComponent('nativeAuth', () => nativeAuth);

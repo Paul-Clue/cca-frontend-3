@@ -14,15 +14,17 @@ import {
   Pressable
 } from 'react-native';
 
- const CustomButton = ({onPress, text, type = 'PRIMARY', bgColor, fgColor}) => {
+  const CustomButton = ({onPress, text, type = 'PRIMARY', bgColor, fgColor}) => {
   return (
+
     <Pressable
-    style={[
-      styles.container, styles[`container_${type}`],
-      bgColor ? {backgroundColor: bgColor} : {}
-      ]}
-      onPress={onPress}
+      style={[
+        styles.container, styles[`container_${type}`],
+        bgColor ? {backgroundColor: bgColor} : {},
+        ]}
+        onPress={onPress}
       >
+
       <Text
         style={[
           styles.text, styles[`text_${type}`],
@@ -31,7 +33,9 @@ import {
       >
             {text}
       </Text>
+
     </Pressable>
+
   )
 };
 

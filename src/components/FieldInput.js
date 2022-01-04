@@ -13,9 +13,9 @@ import {
   TextInput
 } from 'react-native';
 
- const FieldInput = ({value, setValue, placeholder, secureTextEntry}) => {
+ const FieldInput = ({value, setValue, placeholder, secureTextEntry, Error = ''}) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, Error ? {borderColor: 'red', borderWidth: 2, backgroundColor: '#faebd7'} : {},]}>
       <TextInput
       value={value}
       onChangeText={setValue}
