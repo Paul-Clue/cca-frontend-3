@@ -21,17 +21,65 @@ import SocialSignIn from "../components/SocialSignIn";
 import { useNavigation } from "@react-navigation/native";
 
 const ForgotPasswordScreen = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
 
   const navigation = useNavigation();
 
-  const onSend = () => {
-    // console.warn('Send');
-    navigation.navigate('NewPasswordScreen');
+  const onSend = async () => {
+    if (email.trim() === '') {
+      setEmailError( 'An email is required.');
+      console.log(emailError);
+    }else{
+      setEmailError('');
+      console.warn('It went through.');
+      try{
+        let response = await fetch('http://08f0-72-252-198-169.ngrok.io/api/v1/passchangecode', {
+          // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
+          method: 'Post',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user: {
+              email: email.trim(),
+            }
+          })
+        });
+  
+        let res = await response.text();
+        let res2 = '';
+        for (let i = 12; i < res.length-2; i += 1) {
+          res2 += res.charAt(i);
+        }
+        console.warn(res2);
+        // console.warn(email_code)
+  
+        if(response.status >= 200 && response.status < 300) {
+          setEmail('');
+          console.log('res is successful: ' + res);
+
+          navigation.navigate('HomeScreen');
+        }else{
+
+          let errors = res;
+          console.log(response.status);
+          throw errors;
+        }
+      }
+  
+      catch (errors) {
+        console.log('errors caught: ' + errors);
+      }
+      console.warn('Resend');
+
+      navigation.navigate('NewPasswordScreen');
+    }
   };
 
-  // const onResend = () => {
-  //   console.warn('Resend');
+  // const onSend = () => {
+    
   // };
 
   const onSignIn = () => {
@@ -54,7 +102,12 @@ const ForgotPasswordScreen = () => {
         <View style={styles.container}>
           <Text style={styles.title}>{'Reset Your Password'}</Text>
 
-          <FieldInput placeholder='username' value={username} setValue={setUsername}/>
+          <FieldInput Error={emailError} placeholder='Email' value={email} setValue={setEmail}/>
+          {!!emailError && (
+            <Text style={{color: 'red'}}>
+              {emailError}
+            </Text>
+          )}
           {/* <FieldInput placeholder='Email' value={email} setValue={setEmail}/> */}
 
           <CustomButton

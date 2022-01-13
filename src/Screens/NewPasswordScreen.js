@@ -24,12 +24,75 @@ const NewPasswordScreen = () => {
   const [code, setCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
+  const [codeError, setCodeError] = useState('');
+  const [newPasswordError, setNewPasswordError] = useState('');
+
   const navigation = useNavigation();
 
-  const onSubmit = () => {
-    // console.warn('Submit');
-    // TODO: MAYBE SOME LOGIC...NOT SURE YET
-    navigation.navigate('HomeScreen');
+  const onSubmit = async () => {
+    if (code.trim() === '') {
+      setCodeError( 'A code is required.');
+      console.log(codeError);
+    }
+    if (newPassword.trim() === '') {
+      setNewPasswordError( 'A password is required.');
+      console.log(newPasswordError);
+    }else{
+      setCodeError('');
+      setNewPasswordError('');
+      console.warn('It went through.');
+      
+      try{
+        let response = await fetch('http://08f0-72-252-198-169.ngrok.io/api/v1/passchangeverify', {
+          // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
+          method: 'Post',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user: {
+              email_code: code,
+              password: newPassword,
+            }
+          })
+        });
+  
+        let res = await response.text();
+        let res2 = '';
+        for (let i = 12; i < res.length-2; i += 1) {
+          res2 += res.charAt(i);
+        }
+  
+        if(response.status >= 200 && response.status < 300) {
+          setNewPassword('');
+          setCode('');
+          console.log('res is successful: ' + res);
+          alert(
+            "Your password was changed successfully. Go back to sign in.",
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ],
+            { cancelable: true });
+          // navigation.navigate('HomeScreen');
+        }else{
+          alert(
+            "Password change was not successful.",
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ],
+            { cancelable: true });
+          let errors = res;
+          console.log(response.status);
+          throw errors;
+        }
+      }
+  
+      catch (errors) {
+        console.log('errors caught: ' + errors);
+      }
+      // navigation.navigate('HomeScreen');
+    }
   };
 
   const onResend = () => {
@@ -56,8 +119,18 @@ const NewPasswordScreen = () => {
         <View style={styles.container}>
           <Text style={styles.title}>{'Reset Your Password'}</Text>
 
-          <FieldInput placeholder='code' value={code} setValue={setCode}/>
-          <FieldInput placeholder='Enter Your New Password' value={newPassword} setValue={setNewPassword}/>
+          <FieldInput Error={codeError} placeholder='Code' value={code} setValue={setCode}/>
+          {!!codeError && (
+            <Text style={{color: 'red'}}>
+              {codeError}
+            </Text>
+          )}
+          <FieldInput Error={newPasswordError} placeholder='Enter Your New Password' value={newPassword} setValue={setNewPassword} secureTextEntry/>
+          {!!newPasswordError && (
+            <Text style={{color: 'red'}}>
+              {newPasswordError}
+            </Text>
+          )}
 
           <CustomButton
             text='Submit'

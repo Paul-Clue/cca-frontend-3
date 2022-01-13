@@ -12,7 +12,8 @@ import {
   Image,
   TouchableOpacity,
   useWindowDimensions,
-  Button
+  Button,
+  Alert
 } from 'react-native';
 import FieldInput from '../components/FieldInput';
 import CustomButton from "../components/CustomButton";
@@ -24,13 +25,68 @@ import Navigation from "../components/Navigation";
 const ConfirmEmailScreen = () => {
   const [code, setCode] = useState('');
 
+  const [codeError, setCodeError] = useState('');
+
   const navigation = useNavigation();
 
-  const onConfirm = () => {
-    // console.warn('Confirm');
-    // TODO: LOGIC FOR CONFIRM FROM BACK END BEFORE REDIRECT
+  const onConfirm = async () => {
+    if (code.trim() === '') {
+      setCodeError( 'A code is required.');
+      // console.log(codeError);
+    }else{
+      setCodeError('');
 
-    navigation.navigate('HomeScreen');
+      try{
+        let response = await fetch('http://08f0-72-252-198-169.ngrok.io/api/v1/email_code', {
+          // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
+          method: 'Post',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user: {
+              email_code: code,
+            }
+          })
+        });
+  
+        let res = await response.text();
+        let res2 = '';
+        for (let i = 12; i < res.length-2; i += 1) {
+          res2 += res.charAt(i);
+        }
+        console.warn(res2);
+        // console.warn(email_code)
+  
+        if(response.status >= 200 && response.status < 300) {
+          setCode('');
+          console.log('res is successful: ' + res);
+          alert(
+            "Email Confirmed",
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ],
+            { cancelable: true });
+          navigation.navigate('HomeScreen');
+        }else{
+          alert(
+            "The code you entered is not valid.",
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ],
+            { cancelable: true });
+          let errors = res;
+          console.log(response.status);
+          throw errors;
+        }
+      }
+  
+      catch (errors) {
+        console.log('errors caught: ' + errors);
+      }
+    }
+
   };
 
   const onResend = () => {
@@ -58,7 +114,12 @@ const ConfirmEmailScreen = () => {
         <View style={styles.container}>
           <Text style={styles.title}>{'Confirm Your Email'}</Text>
 
-          <FieldInput placeholder='Enter Your Confirmation Code' value={code} setValue={setCode}/>
+          <FieldInput Error={codeError} placeholder='Enter Your Confirmation Code' value={code} setValue={setCode}/>
+          {!!codeError && (
+            <Text style={{color: 'red'}}>
+              {codeError}
+            </Text>
+          )}
           {/* <FieldInput placeholder='Email' value={email} setValue={setEmail}/> */}
 
           <CustomButton
@@ -66,11 +127,11 @@ const ConfirmEmailScreen = () => {
             onPress={onConfirm}
           />
 
-          <CustomButton
+          {/* <CustomButton
             text='Request Code'
             onPress={onResend}
             type='SECONDARY'
-          />
+          /> */}
 
           <CustomButton
             text='Back To Sign In.'

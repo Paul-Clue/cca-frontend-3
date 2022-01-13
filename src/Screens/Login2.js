@@ -1,8 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import * as Keychain from 'react-native-keychain';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
 import { StatusBar } from 'expo-status-bar';
+import FieldInput from '../components/FieldInput';
+import CustomButton from "../components/CustomButton";
+import SocialSignIn from "../components/SocialSignIn";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ContentLoader from "react-native-easy-content-loader";
+import Loader from 'react-native-easy-content-loader';
+// import Load from "react-native-loading-gif";
+import "react-native-url-polyfill/auto";
+
 import {
   StyleSheet,
   Text,
@@ -13,24 +23,101 @@ import {
   Image,
   TouchableOpacity,
   useWindowDimensions,
-  Button
+  Button,
 } from 'react-native';
-import FieldInput from '../components/FieldInput';
-import CustomButton from "../components/CustomButton";
-import SocialSignIn from "../components/SocialSignIn";
-import { useNavigation } from "@react-navigation/native";
+import Svg, {
+  // Text,
+  Circle,
+  Ellipse,
+  G,
+  TSpan,
+  TextPath,
+  Path,
+  Polygon,
+  Polyline,
+  Line,
+  Rect,
+  Use,
+  Symbol,
+  Defs,
+  LinearGradient,
+  RadialGradient,
+  Stop,
+  ClipPath,
+  Pattern,
+  Mask,
+} from 'react-native-svg';
+
+const ACCESS_TOKEN = 'access_token';
 
 const Login2 = () => {
+  // const Load = useRef();
+  const [loading, setLoading] = useState();
+  useEffect( () => {
+    checkForToken();
+    setTimeout(() => setLoading(false), 2000);
+    // Load.setTimeClose();
+  },[])
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   // ERRORS
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [err, setErr] = useState('');
+  let errors = '';
+  let tempErr = '';
 
   const {height} = useWindowDimensions();
   const {width} = useWindowDimensions();
 
   const navigation = useNavigation();
+
+  const storeToken = async (accessToken) => {
+    try {
+      await AsyncStorage.setItem(ACCESS_TOKEN, accessToken);
+      getToken();
+    }
+    catch(error) {
+      console.log(error);
+    }
+  }
+
+  const getToken = async () => {
+    try {
+      let token = await AsyncStorage.getItem(ACCESS_TOKEN);
+      // console.warn("This is the token:" + token);
+    }
+    catch(error) {
+      console.log("Token collection error in getToken")
+    }
+  }
+
+  const checkForToken = async () => {
+    try {
+      let token = await AsyncStorage.getItem(ACCESS_TOKEN);
+
+      if(!token){
+        console.log('');
+      }else{
+        navigation.navigate('HomeScreen');
+        // console.warn("This is the token:" + token);
+      }
+    }
+    catch(error) {
+      console.log("Token collection error in getToken")
+    }
+  }
+
+  const removeToken = async () => {
+    try {
+      await AsyncStorage.removeItem(ACCESS_TOKEN);
+      getToken();
+    }
+    catch(error) {
+      console.log("Token collection error in getToken")
+    }
+  }
 
   const onSignIn = async () => {
     if (email.trim() === '') {
@@ -47,7 +134,7 @@ const Login2 = () => {
         // const token = JSON.parse(sessionStorage.getItem('CurrentUser')) || '';
         // const credential = await Keychain.getGenericPassword();
         // const token = JSON.parse(credential.jwt)
-        let response = await fetch('http://21cf-72-252-198-169.ngrok.io/api/v1/login', {
+        let response = await fetch('https://08f0-72-252-198-169.ngrok.io/api/v1/login', {
           // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
           method: 'Post',
           headers: {
@@ -57,20 +144,30 @@ const Login2 = () => {
           },
           body: JSON.stringify({
               // username: 'pc@gmail.com' ,
-              email: email,
-              password: password,
+              email: email.trim(),
+              password,
               // confirmPassword: confirmPassword
           })
         });
-
+        // console.warn(response.text())
         let res = await response.text();
 
         if(response.status >= 200 && response.status < 300) {
-
-          console.log('res is successful: ' + res);
+          setErr('');
+          let accessToken = res.jwt;
+          storeToken(accessToken);
+          setEmail('');
+          setPassword('');
           navigation.navigate('HomeScreen');
         }else{
-          let errors = res;
+          // errors = res.;
+          removeToken();
+          for (let i = 10; i < res.length-2; i += 1) {
+            errors += res.charAt(i);
+          }
+          setErr(errors);
+
+          console.warn(errors)
           throw errors;
         }
       }
@@ -124,19 +221,65 @@ const Login2 = () => {
             style={{height: height * 0.123, marginTop: '15%', marginBottom: '47%'}}
           >
           </Image>
+          {/* <Load ref={Load}></Load> */}
+          {/* <Loader loading={loading}> */}
+          {/* <Loader
+              primaryColor='rgba(195, 191, 191, 1)'
+              secondaryColor='rgba(218, 215, 215, 1)'
+              animationDuration={500}
+              loading={loading}
+          > */}
+          <ContentLoader
+            active
+            loading={loading}
+            animationDuration={500}
+            pRows={3}
+            pWidth={["75%", "75%", "75%", "75%"]}
+            pHeight={[40, 40, 40, 40]}
+            paragraphStyles={{marginLeft: '12%', marginTop: '5%'}}
+            primaryColor={'rgba(220, 220, 220, 1)'}
+            secondaryColor={'rgba(150, 150, 150, 1)'}
+
+          >
+
+         {err === "That user could not be found" && (
+            <Text style={{color: 'red'}}>
+              {err}
+            </Text>
+          )}
+          <Text style={{color: '#3B71F3', fontSize: 15, fontWeight: 'bold', marginRight: '65%'}}>Email</Text>
 
           <FieldInput Error={emailError} placeholder='Email' value={email} setValue={setEmail}/>
           {!!emailError && (
+
             <Text style={{color: 'red'}}>
               {emailError}
             </Text>
-          )}
 
+          )}
+          <Text style={{color: '#3B71F3', fontSize: 15, fontWeight: 'bold', marginRight: '57%'}}>Password</Text>
+              {/* USED <Svg></Svg> TO MAKE OUTLINE ON TEXT}
+          {/* <View style={{marginBottom: '-10%', marginRight: '55%'}}>
+          <Svg height="60" width="200">
+            <Text
+              fill='white'
+              stroke='#3B71F3'
+              strokeWidth= '1'
+              fontSize="17"
+              fontWeight="bold"
+              x="100"
+              y="20"
+              textAnchor="middle"
+            >
+              Password
+            </Text>
+          </Svg>
+          </View> */}
           <FieldInput Error={passwordError} placeholder='Password' value={password} setValue={setPassword} secureTextEntry/>
           {!!passwordError && (
-            <Text style={{color: 'red'}}>
-              {passwordError}
-            </Text>
+              <Text style={{color: 'red'}}>
+                {passwordError}
+              </Text>
           )}
 
           <CustomButton
@@ -156,6 +299,8 @@ const Login2 = () => {
             onPress={onSignUp}
             type='TERTIARY'
            />
+           {/* </Loader> */}
+           </ContentLoader>
         </ImageBackground>
       </ScrollView>
     )

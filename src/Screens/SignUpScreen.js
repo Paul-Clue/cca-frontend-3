@@ -3,6 +3,7 @@ import * as Keychain from 'react-native-keychain';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
 import { StatusBar } from 'expo-status-bar';
+
 import {
   StyleSheet,
   Text,
@@ -26,8 +27,10 @@ const SignUpScreen = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [err, setErr] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [errors, setErrors] = useState([]);
+  // const [errors, setErrors] = useState([]);
+  let errors = '';
   
   //  ERRORS
   const [usernameError, setUsernameError] = useState('');
@@ -53,7 +56,7 @@ const SignUpScreen = () => {
       setPasswordError('');
 
     try{
-      let response = await fetch('http://21cf-72-252-198-169.ngrok.io/api/v1/sign_up', {
+      let response = await fetch('http://08f0-72-252-198-169.ngrok.io/api/v1/sign_up', {
         // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
         method: 'Post',
         headers: {
@@ -63,7 +66,7 @@ const SignUpScreen = () => {
         body: JSON.stringify({
           user: {
             username: username,
-            email: email,
+            email: email.trim(),
             password: password,
             // confirmPassword: confirmPassword
           }
@@ -73,11 +76,23 @@ const SignUpScreen = () => {
       let res = await response.text();
 
       if(response.status >= 200 && response.status < 300) {
-        console.log('res is successful: ' + res);
-        const rawValue = JSON.stringify(res);
-        await Keychain.setGenericPassword('session', rawValue);
+        setErr('');
+        setUsername('');
+        setPassword('');
+        setEmail('');
+        navigation.navigate('ConfirmEmailScreen');
+        // console.log('Key To Save: ' + res);
+        // const rawValue = JSON.stringify(res);
+        // console.log(rawValue);
+        // await Keychain.setGenericPassword('session', rawValue);
       }else{
-        let errors = res;
+        
+        for (let i = 10; i < res.length-2; i += 1) {
+          errors += res.charAt(i);
+          
+        }
+        setErr(errors);
+        console.warn(err);
         throw errors;
       }
     }
@@ -86,7 +101,6 @@ const SignUpScreen = () => {
       console.log('errors caught: ' + errors);
     }
 
-    navigation.navigate('ConfirmEmailScreen');
   }
   };
 
@@ -126,6 +140,12 @@ const SignUpScreen = () => {
           {!!usernameError && (
             <Text style={{color: 'red'}}>
               {usernameError}
+            </Text>
+          )}
+
+          {err === "This email is already being used." && (
+            <Text style={{color: 'red'}}>
+              {err}
             </Text>
           )}
 
