@@ -37,7 +37,7 @@ const ConfirmEmailScreen = () => {
       setCodeError('');
 
       try{
-        let response = await fetch('http://08f0-72-252-198-169.ngrok.io/api/v1/email_code', {
+        let response = await fetch('https://058c-136-144-35-115.ngrok.io/api/v1/email_code', {
           // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
           method: 'Post',
           headers: {
@@ -114,7 +114,7 @@ const ConfirmEmailScreen = () => {
         <View style={styles.container}>
           <Text style={styles.title}>{'Confirm Your Email'}</Text>
 
-          <FieldInput Error={codeError} placeholder='Enter Your Confirmation Code' value={code} setValue={setCode}/>
+          <FieldInput Error={codeError} placeholder='Enter Your Confirmation Code' value={code} setValue={setCode} icon='lock'/>
           {!!codeError && (
             <Text style={{color: 'red'}}>
               {codeError}

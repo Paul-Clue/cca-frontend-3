@@ -56,7 +56,7 @@ const SignUpScreen = () => {
       setPasswordError('');
 
     try{
-      let response = await fetch('http://08f0-72-252-198-169.ngrok.io/api/v1/sign_up', {
+      let response = await fetch('https://058c-136-144-35-115.ngrok.io/api/v1/sign_up', {
         // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
         method: 'Post',
         headers: {
@@ -136,7 +136,7 @@ const SignUpScreen = () => {
         <View style={styles.container}>
           <Text style={styles.title}>{'Create An Account'}</Text>
 
-          <FieldInput Error={usernameError} placeholder='Username' value={username} setValue={setUsername}/>
+          <FieldInput Error={usernameError} placeholder='Username' value={username} setValue={setUsername} icon='person'/>
           {!!usernameError && (
             <Text style={{color: 'red'}}>
               {usernameError}
@@ -149,14 +149,14 @@ const SignUpScreen = () => {
             </Text>
           )}
 
-          <FieldInput Error={emailError} placeholder='Email' value={email} setValue={setEmail}/>
+          <FieldInput Error={emailError} placeholder='Email' value={email} setValue={setEmail} icon='email'/>
           {!!emailError && (
             <Text style={{color: 'red'}}>
               {emailError}
             </Text>
           )}
 
-          <FieldInput Error={passwordError} placeholder='Password' value={password} setValue={setPassword} secureTextEntry/>
+          <FieldInput Error={passwordError} placeholder='Password' value={password} setValue={setPassword} secureTextEntry icon='lock'/>
           {!!passwordError && (
             <Text style={{color: 'red'}}>
               {passwordError}

@@ -34,7 +34,7 @@ const ForgotPasswordScreen = () => {
       setEmailError('');
       console.warn('It went through.');
       try{
-        let response = await fetch('http://08f0-72-252-198-169.ngrok.io/api/v1/passchangecode', {
+        let response = await fetch('https://058c-136-144-35-115.ngrok.io/api/v1/passchangecode', {
           // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
           method: 'Post',
           headers: {
@@ -102,7 +102,7 @@ const ForgotPasswordScreen = () => {
         <View style={styles.container}>
           <Text style={styles.title}>{'Reset Your Password'}</Text>
 
-          <FieldInput Error={emailError} placeholder='Email' value={email} setValue={setEmail}/>
+          <FieldInput Error={emailError} placeholder='Email' value={email} setValue={setEmail} icon='email'/>
           {!!emailError && (
             <Text style={{color: 'red'}}>
               {emailError}

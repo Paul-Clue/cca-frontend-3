@@ -1,9 +1,13 @@
+import 'react-native-gesture-handler';
 import React, { useEffect, useState } from "react";
 import CustomButton from "../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import ContentLoader from "react-native-easy-content-loader";
-import Loader from 'react-native-easy-content-loader';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Icon } from 'react-native-elements';
+import FieldInput from '../components/FieldInput';
+// import ContentLoader from "react-native-easy-content-loader";
+// import Loader from 'react-native-easy-content-loader';
 import {
   StyleSheet,
   Text,
@@ -22,10 +26,10 @@ const ACCESS_TOKEN = 'access_token';
 
 
  const HomeScreen = () => {
-  const [loading, setLoading] = useState();
-  useEffect( () => {
-    setTimeout(() => setLoading(false), 2000);
-  },[])
+  // const [loading, setLoading] = useState();
+  // useEffect( () => {
+  //   setTimeout(() => setLoading(false), 2000);
+  // },[])
   const navigation = useNavigation();
   const removeToken = async () => {
     try {
@@ -41,13 +45,15 @@ const ACCESS_TOKEN = 'access_token';
     navigation.navigate('Login2');
   }
 
+  const loginWithFacebook = () => { console.log('You logged in!') }
+
   return (
     <ScrollView style={{width: "100%"}} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
       {/* <View style={{marginTop: '30%'}}> */}
       
         <View style={styles.container}>
           <View style={{marginTop: '40%', width: '100%', alignItems: 'center'}}>
-          <ContentLoader
+          {/* <ContentLoader
               active
               loading={loading}
               animationDuration={500}
@@ -58,13 +64,25 @@ const ACCESS_TOKEN = 'access_token';
               primaryColor={'rgba(220, 220, 220, 1)'}
               secondaryColor={'rgba(100, 100, 100, 1)'}
 
-            >
+            > */}
             <Text> HomeScreen </Text>
+            {/* <FontAwesome.Button name="facebook" backgroundColor="#3b5998" onPress={loginWithFacebook}>
+              Login with Facebook
+            </FontAwesome.Button> */}
+            <View style={styles.searchSection}>
+                <Icon style={styles.searchIcon} name="" size={20} color="#000"/>
+                <FieldInput
+                    style={styles.input}
+                    placeholder="User Nickname"
+                    underlineColorAndroid="transparent"
+                    icon='search'
+                />
+            </View>
             <CustomButton
               text='Log out'
               onPress={logOut}
             />
-            </ContentLoader>
+            {/* </ContentLoader> */}
           </View>
         </View>
         
@@ -81,6 +99,9 @@ container: {
   alignItems: 'center',
   width: '100%'
 },
+searchSection: {
+  flexDirection: 'row',
+}
 
 });
 

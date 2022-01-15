@@ -43,7 +43,7 @@ const NewPasswordScreen = () => {
       console.warn('It went through.');
       
       try{
-        let response = await fetch('http://08f0-72-252-198-169.ngrok.io/api/v1/passchangeverify', {
+        let response = await fetch('https://058c-136-144-35-115.ngrok.io/api/v1/passchangeverify', {
           // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
           method: 'Post',
           headers: {
@@ -119,13 +119,13 @@ const NewPasswordScreen = () => {
         <View style={styles.container}>
           <Text style={styles.title}>{'Reset Your Password'}</Text>
 
-          <FieldInput Error={codeError} placeholder='Code' value={code} setValue={setCode}/>
+          <FieldInput Error={codeError} placeholder='Code' value={code} setValue={setCode} icon='lock'/>
           {!!codeError && (
             <Text style={{color: 'red'}}>
               {codeError}
             </Text>
           )}
-          <FieldInput Error={newPasswordError} placeholder='Enter Your New Password' value={newPassword} setValue={setNewPassword} secureTextEntry/>
+          <FieldInput Error={newPasswordError} placeholder='Enter Your New Password' value={newPassword} setValue={setNewPassword} secureTextEntry icon='lock'/>
           {!!newPasswordError && (
             <Text style={{color: 'red'}}>
               {newPasswordError}

@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React, { useEffect, useState } from "react";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
@@ -5,6 +6,9 @@ import { Ionicons } from "@expo/vector-icons";
 import AppLoading from 'expo-app-loading';
 import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
 import { StatusBar } from 'expo-status-bar';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   StyleSheet,
   Text,
@@ -28,6 +32,11 @@ import ConfirmEmailScreen from "./src/Screens/ConfirmEmailScreen";
 import ForgotPasswordScreen from "./src/Screens/ForgotPasswordScreen";
 import NewPasswordScreen from "./src/Screens/NewPasswordScreen";
 import Navigation from "./src/components/Navigation";
+// import HomeScreen from "./src/Screens/HomeScreen";
+
+// const Drawer = createDrawerNavigator();
+// const Stack = createNativeStackNavigator();
+
 
 export default function App() {
       return (
@@ -43,6 +52,31 @@ export default function App() {
 
       );
   }
+
+// function MyDrawer() {
+//   return (
+//     <Drawer.Navigator initialRouteName="Home">
+//       <Drawer.Screen name="HomeScreen" component={HomeScreen} />
+//       <Drawer.Screen name="Login2" component={Login2} />
+//       {/* <Drawer.Screen name="Article" component={Article} /> */}
+//     </Drawer.Navigator>
+//   );
+// }
+
+// export default function App() {
+//   return (
+//     <NavigationContainer>
+//       <Stack.Navigator screenOptions={{headerShown: false}}>
+//         <Stack.Screen name={'Login2'} component={MyDrawer} />
+//         <Stack.Screen name={'SignUpScreen'} component={SignUpScreen} />
+//         <Stack.Screen name={'ConfirmEmailScreen'} component={ConfirmEmailScreen} />
+//         <Stack.Screen name={'ForgotPasswordScreen'} component={ForgotPasswordScreen} />
+//         <Stack.Screen name={'NewPasswordScreen'} component={NewPasswordScreen} />
+//         <Stack.Screen name={'HomeScreen'} component={MyDrawer} />
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   )
+// }
 
 
 const styles = StyleSheet.create({

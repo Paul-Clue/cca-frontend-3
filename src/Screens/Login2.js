@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React, { useEffect, useState, useRef } from "react";
 import * as Keychain from 'react-native-keychain';
 import AppLoading from 'expo-app-loading';
@@ -10,7 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ContentLoader from "react-native-easy-content-loader";
 import Loader from 'react-native-easy-content-loader';
-// import Load from "react-native-loading-gif";
+import Load from "react-native-loading-gif";
 import "react-native-url-polyfill/auto";
 
 import {
@@ -25,37 +26,37 @@ import {
   useWindowDimensions,
   Button,
 } from 'react-native';
-import Svg, {
-  // Text,
-  Circle,
-  Ellipse,
-  G,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-} from 'react-native-svg';
+// import Svg, {
+//   Text,
+//   Circle,
+//   Ellipse,
+//   G,
+//   TSpan,
+//   TextPath,
+//   Path,
+//   Polygon,
+//   Polyline,
+//   Line,
+//   Rect,
+//   Use,
+//   Symbol,
+//   Defs,
+//   LinearGradient,
+//   RadialGradient,
+//   Stop,
+//   ClipPath,
+//   Pattern,
+//   Mask,
+// } from 'react-native-svg';
 
 const ACCESS_TOKEN = 'access_token';
 
 const Login2 = () => {
   // const Load = useRef();
-  const [loading, setLoading] = useState();
+  // const [loading, setLoading] = useState();
   useEffect( () => {
     checkForToken();
-    setTimeout(() => setLoading(false), 2000);
+    // setTimeout(() => setLoading(false), 2000);
     // Load.setTimeClose();
   },[])
 
@@ -134,7 +135,7 @@ const Login2 = () => {
         // const token = JSON.parse(sessionStorage.getItem('CurrentUser')) || '';
         // const credential = await Keychain.getGenericPassword();
         // const token = JSON.parse(credential.jwt)
-        let response = await fetch('https://08f0-72-252-198-169.ngrok.io/api/v1/login', {
+        let response = await fetch('https://058c-136-144-35-115.ngrok.io/api/v1/login', {
           // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
           method: 'Post',
           headers: {
@@ -215,7 +216,7 @@ const Login2 = () => {
     return (
       <ScrollView style={{width: "100%"}} contentContainerStyle={{ flexGrow: 1 }}>
         <ImageBackground fadeDuration={1500} source={require('../../assets/CCAlogin.jpg')} resizeMode="cover" style={styles.image}>
-          {/* <Text style={styles.text}>'Some text'</Text> */}
+
           <Image
             source={require('../../assets/CCALogo.png')}
             style={{height: height * 0.123, marginTop: '15%', marginBottom: '47%'}}
@@ -229,7 +230,7 @@ const Login2 = () => {
               animationDuration={500}
               loading={loading}
           > */}
-          <ContentLoader
+          {/* <ContentLoader
             active
             loading={loading}
             animationDuration={500}
@@ -240,7 +241,7 @@ const Login2 = () => {
             primaryColor={'rgba(220, 220, 220, 1)'}
             secondaryColor={'rgba(150, 150, 150, 1)'}
 
-          >
+          > */}
 
          {err === "That user could not be found" && (
             <Text style={{color: 'red'}}>
@@ -249,7 +250,7 @@ const Login2 = () => {
           )}
           <Text style={{color: '#3B71F3', fontSize: 15, fontWeight: 'bold', marginRight: '65%'}}>Email</Text>
 
-          <FieldInput Error={emailError} placeholder='Email' value={email} setValue={setEmail}/>
+          <FieldInput Error={emailError} placeholder='Email' value={email} setValue={setEmail} icon='email'/>
           {!!emailError && (
 
             <Text style={{color: 'red'}}>
@@ -275,7 +276,7 @@ const Login2 = () => {
             </Text>
           </Svg>
           </View> */}
-          <FieldInput Error={passwordError} placeholder='Password' value={password} setValue={setPassword} secureTextEntry/>
+          <FieldInput Error={passwordError} placeholder='Password' value={password} setValue={setPassword} secureTextEntry icon='lock'/>
           {!!passwordError && (
               <Text style={{color: 'red'}}>
                 {passwordError}
@@ -300,7 +301,7 @@ const Login2 = () => {
             type='TERTIARY'
            />
            {/* </Loader> */}
-           </ContentLoader>
+           {/* </ContentLoader> */}
         </ImageBackground>
       </ScrollView>
     )
