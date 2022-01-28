@@ -56,12 +56,14 @@ const SignUpScreen = () => {
       setPasswordError('');
 
     try{
-      let response = await fetch('https://058c-136-144-35-115.ngrok.io/api/v1/sign_up', {
+      let response = await fetch('https://5bdf-72-252-198-169.ngrok.io/api/v1/sign_up', {
+      // let response = await fetch('https://0692-64-64-117-139.ngrok.io/api/v1/sign_up', {
         // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
         method: 'Post',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
+          // 'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: JSON.stringify({
           user: {
@@ -76,6 +78,7 @@ const SignUpScreen = () => {
       let res = await response.text();
 
       if(response.status >= 200 && response.status < 300) {
+        console.warn(response);
         setErr('');
         setUsername('');
         setPassword('');
@@ -92,7 +95,7 @@ const SignUpScreen = () => {
           
         }
         setErr(errors);
-        console.warn(err);
+        console.warn('there was an error');
         throw errors;
       }
     }

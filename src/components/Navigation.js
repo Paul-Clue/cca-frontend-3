@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 import { Icon } from 'react-native-elements';
 import Login2 from '../Screens/Login2';
 import SignUpScreen from "../Screens/SignUpScreen";
@@ -40,7 +40,7 @@ function MyDrawer() {
         }}
         
         />
-        <Drawer.Screen
+        {/* <Drawer.Screen
         name="Login2"
         component={Login2}
         options={{
@@ -52,7 +52,7 @@ function MyDrawer() {
             marginTop: 200
           }
         }}
-        />
+        /> */}
 
       </Drawer.Navigator>
   );
@@ -63,7 +63,7 @@ function MyDrawer() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name={'Login2'} component={MyDrawer} />
+        <Stack.Screen name={'Login2'} component={Login2} />
         <Stack.Screen name={'SignUpScreen'} component={SignUpScreen} />
         <Stack.Screen name={'ConfirmEmailScreen'} component={ConfirmEmailScreen} />
         <Stack.Screen name={'ForgotPasswordScreen'} component={ForgotPasswordScreen} />

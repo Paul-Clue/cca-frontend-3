@@ -50,6 +50,7 @@ import {
 // } from 'react-native-svg';
 
 const ACCESS_TOKEN = 'access_token';
+const USER = 'user';
 
 const Login2 = () => {
   // const Load = useRef();
@@ -78,6 +79,16 @@ const Login2 = () => {
     try {
       await AsyncStorage.setItem(ACCESS_TOKEN, accessToken);
       getToken();
+    }
+    catch(error) {
+      console.log(error);
+    }
+  }
+
+  const storeUser = async (user) => {
+    try {
+      await AsyncStorage.setItem(USER, user);
+      // getToken();
     }
     catch(error) {
       console.log(error);
@@ -120,6 +131,16 @@ const Login2 = () => {
     }
   }
 
+  const removeUser = async () => {
+    try {
+      await AsyncStorage.removeItem(User);
+      // getToken();
+    }
+    catch(error) {
+      console.log("Error removing user")
+    }
+  }
+
   const onSignIn = async () => {
     if (email.trim() === '') {
       setEmailError( 'An email is required.');
@@ -131,11 +152,11 @@ const Login2 = () => {
       setEmailError( '');
       setPasswordError( '');
       try{
-        // sessionStorage.setItem('CurrentUser', JSON.stringify(data));
         // const token = JSON.parse(sessionStorage.getItem('CurrentUser')) || '';
         // const credential = await Keychain.getGenericPassword();
         // const token = JSON.parse(credential.jwt)
-        let response = await fetch('https://058c-136-144-35-115.ngrok.io/api/v1/login', {
+        // let response = await fetch('http://localhost:3001/api/v1/login', {
+        let response = await fetch('https://5bdf-72-252-198-169.ngrok.io/api/v1/login', {
           // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
           method: 'Post',
           headers: {
@@ -151,24 +172,30 @@ const Login2 = () => {
           })
         });
         // console.warn(response.text())
-        let res = await response.text();
+        let res = await response.json();
+        
 
         if(response.status >= 200 && response.status < 300) {
           setErr('');
+          console.warn(res);
           let accessToken = res.jwt;
+          let theUser = JSON.stringify({res});
           storeToken(accessToken);
+          storeUser(theUser);
           setEmail('');
           setPassword('');
           navigation.navigate('HomeScreen');
+          // console.warn(response);
         }else{
           // errors = res.;
           removeToken();
+          removeUser();
           for (let i = 10; i < res.length-2; i += 1) {
             errors += res.charAt(i);
           }
           setErr(errors);
 
-          console.warn(errors)
+          // console.warn(errors)
           throw errors;
         }
       }
@@ -186,11 +213,11 @@ const Login2 = () => {
   };
 
   const onSignInWithGoogle = () => {
-    console.warn('Google');
+    // console.warn('Google');
   };
 
   const onSignInWithApple = () => {
-    console.warn('Apple');
+    // console.warn('Apple');
   };
 
   const onForgotPassword = () => {
