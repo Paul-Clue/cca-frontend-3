@@ -4,9 +4,9 @@ import React, { useEffect, useState } from "react";
 import CustomButton from "../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import { Icon } from 'react-native-elements';
-import FieldInput from '../components/FieldInput';
+// import { Ionicons, FontAwesome } from "@expo/vector-icons";
+// import { Icon } from 'react-native-elements';
+// import FieldInput from '../components/FieldInput';
 // import ContentLoader from "react-native-easy-content-loader";
 // import Loader from 'react-native-easy-content-loader';
 import { Camera } from 'expo-camera';
@@ -16,16 +16,17 @@ import {
   Text,
   View,
   ScrollView,
-  SafeAreaView,
-  ImageBackground,
-  Image,
-  TouchableOpacity,
-  useWindowDimensions,
-  Button,
+  // SafeAreaView,
+  // ImageBackground,
+  // Image,
+  // TouchableOpacity,
+  // useWindowDimensions,
+  // Button,
   Platform,
 } from 'react-native';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
-import { ScreenStackHeaderBackButtonImage } from 'react-native-screens';
+// import { ScreenStackHeaderBackButtonImage } from 'react-native-screens';
+import YoutubePlayer from 'react-native-youtube-iframe';
 
 const ACCESS_TOKEN = 'access_token';
 const USER = 'user';
@@ -38,10 +39,19 @@ const USER = 'user';
   const [image, setImage] = useState(null);
   const [imageData, setImageData] = useState(null);
   const [photoUri, setPhotoUri] = useState(null);
+  // const [playing, setPlaying] = useState(false);
+
+  // const togglePlaying = () => {
+  //       setPlaying((prev) => !prev);
+  //     }
   // const [loading, setLoading] = useState();
   // useEffect( () => {
   //   setTimeout(() => setLoading(false), 2000);
   // },[])
+  const GoToProfile = () => {
+    console.log('Button Push worked');
+    navigation.navigate('ProfileModal');
+  }
   const navigation = useNavigation();
   const removeToken = async () => {
     try {
@@ -164,11 +174,11 @@ const USER = 'user';
   }
 
   return (
-    <ScrollView style={{width: "100%"}} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
+    <ScrollView style={{width: "100%", paddingTop: 0, backgroundColor: 'black'}} contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
       {/* <View style={{marginTop: '30%'}}> */}
       
         <View style={styles.container}>
-          <View style={{marginTop: '40%', width: '100%', alignItems: 'center'}}>
+          <View style={{marginTop: '-15%', width: '100%', alignItems: 'center'}}>
           {/* <ContentLoader
               active
               loading={loading}
@@ -185,23 +195,54 @@ const USER = 'user';
             {/* <FontAwesome.Button name="facebook" backgroundColor="#3b5998" onPress={loginWithFacebook}>
               Login with Facebook
             </FontAwesome.Button> */}
-            <View style={styles.searchSection}>
-                <Icon style={styles.searchIcon} name="" size={20} color="#000"/>
+            <View style={{borderWidth: 1, borderColor: 'goldenrod', borderRadius: 20}}>
+              <YoutubePlayer
+                height={300}
+                width={410}
+                play={false}
+                videoId={'Kh7VLhoFULI'}
+              />
+              {/* <Button title={playing ? 'pause' : 'play'} onPress={togglePlaying} /> */}
+            </View>
+
+            <View style={styles.welcome}>
+                {/* <Icon style={styles.searchIcon} name="" size={20} color="#000"/>
                 <FieldInput
                     style={styles.input}
                     placeholder="User Name"
                     underlineColorAndroid="transparent"
                     icon='search'
-                />
+                /> */}
+                <Text style={{color: 'whitesmoke', fontSize: 30, fontWeight: 'bold'}}>WELCOME</Text>
+                <Text style={{color: 'whitesmoke'}}>
+                  CCA wants you to have a swift and successful reentry.
+                  So we created this app to help you accomplish some of the
+                  necessary task you need done in your first months home.The video above gives
+                  a brief explanation for how to use this app. Watch it, and continue on your path
+                  to a victorious reentry.
+                </Text>
             </View>
-            <CustomButton
+            {/* <CustomButton
               text='Log out'
               onPress={logOut}
-            />
+            /> */}
             {/* </ContentLoader> */}
+
+              <View style={{width: '80%', alignItems: 'center', marginTop: '10%'}}>
+                <CustomButton
+                  text='Edit Profile'
+                  onPress={GoToProfile}
+                />
+                <CustomButton
+                  text='Download Google Meets'
+                  // onPress={checkButton}
+                />
+            </View>
+
           </View>
         </View>
-        <View style={styles.pic}>
+        
+        {/* <View style={styles.pic}>
          <TouchableOpacity
             style={styles.button}
             onPress={async () => {
@@ -217,7 +258,7 @@ const USER = 'user';
             <Text style={styles.text}> Pick An Image </Text>
             <Image source={{ uri: photoUri }} style={styles.backgroundImage} ></Image>
           </TouchableOpacity>
-          </View>
+          </View> */}
    
     {/* </View> */}
   </ScrollView>
@@ -248,14 +289,17 @@ container: {
   marginTop: '20%',
   fontSize: 25,
   alignItems: 'center',
+  justifyContent: 'center',
   width: '100%'
 },
 backgroundImage: {
   flex: 1,
   resizeMode: 'cover',
 },
-searchSection: {
-  flexDirection: 'row',
+welcome: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: '10%'
 },
 camera: {
   width: 300,

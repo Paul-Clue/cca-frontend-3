@@ -2,22 +2,14 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
-  View,
-  ScrollView,
-  SafeAreaView,
-  ImageBackground,
-  Image,
   TouchableOpacity,
-  useWindowDimensions,
-  Button,
-  TextInput,
   Pressable
 } from 'react-native';
 
   const CustomButton = ({onPress, text, type = 'PRIMARY', bgColor, fgColor}) => {
   return (
 
-    <Pressable
+    <TouchableOpacity
       style={[
         styles.container, styles[`container_${type}`],
         bgColor ? {backgroundColor: bgColor} : {},
@@ -34,7 +26,7 @@ import {
             {text}
       </Text>
 
-    </Pressable>
+    </TouchableOpacity>
 
   )
 };

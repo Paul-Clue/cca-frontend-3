@@ -12,9 +12,13 @@ import ForgotPasswordScreen from "../Screens/ForgotPasswordScreen";
 import NewPasswordScreen from "../Screens/NewPasswordScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import MyDrawer2 from './MyDrawer2';
+import ProfileModal from '../Screens/ProfileModal'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 function MyDrawer() {
   return (
@@ -31,12 +35,18 @@ function MyDrawer() {
       }}
       >
         <Drawer.Screen
-        name="Home"
+        name="Home Screen"
         component={HomeScreen}
         options={{
           drawerIcon: () => (
             <Icon name='home' color='navy'/>
           ),
+          headerStyle: {
+            backgroundColor: '#3B71F3',
+          },
+          // headerRight: () => (
+          //   <Icon name= 'search' color='black'/>
+          // )
         }}
         
         />
@@ -58,19 +68,61 @@ function MyDrawer() {
   );
 }
 
-
- const Navigation = () => {
+function MyTabs() {
   return (
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: () => (
+            <Icon name='home' color='navy'/>
+          ),
+        }}
+        />
+      {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
+    </Tab.Navigator>
+  );
+}
+
+const RootStackForModal = () =>{
+  return(
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
+      <RootStack.Navigator mode="modal" screenOptions={{headerShown: false}}>
+      <RootStack.Screen name='ScreensForStack' component={ScreensForStack}/>
+        <RootStack.Screen name='ProfileModal' component={ProfileModal}/>
+      </RootStack.Navigator>
+    </NavigationContainer>
+  )
+}
+
+const ScreensForStack = () =>{
+  return(
+      <Stack.Navigator screenOptions={{headerShown: false}} >
         <Stack.Screen name={'Login2'} component={Login2} />
         <Stack.Screen name={'SignUpScreen'} component={SignUpScreen} />
         <Stack.Screen name={'ConfirmEmailScreen'} component={ConfirmEmailScreen} />
         <Stack.Screen name={'ForgotPasswordScreen'} component={ForgotPasswordScreen} />
         <Stack.Screen name={'NewPasswordScreen'} component={NewPasswordScreen} />
-        <Stack.Screen name={'HomeScreen'} component={MyDrawer} />
+        <Stack.Screen
+        name={'HomeScreen'}
+        component={MyTabs, MyDrawer}
+        // options={{
+        //   headerStyle: {
+        //     title: 'My Home',
+        //     backgroundColor: 'yellow'
+        //   }
+        // }}
+        />
+        {/* <Stack.Screen name={'HomeScreen'} component={MyTabs} /> */}
       </Stack.Navigator>
-    </NavigationContainer>
+  )
+}
+
+
+ const Navigation = () => {
+  return (
+    <RootStackForModal/>
   )
 };
 

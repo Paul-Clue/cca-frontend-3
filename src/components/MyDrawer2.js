@@ -23,6 +23,7 @@ function MyDrawer2 ({progress,...props}){
   // const navigation = useNavigation();
   const [profilePic, setProfilePic] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
 
   useEffect (() => {
     (async () => {
@@ -42,6 +43,7 @@ function MyDrawer2 ({progress,...props}){
     let user = await AsyncStorage.getItem(USER);
     let theUser = JSON.parse(user);
     let userId = theUser.res.user.id;
+    setUserEmail(theUser.res.user.email);
     
       try{
         let img = await fetch (`https://5bdf-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
@@ -193,10 +195,12 @@ const pickImage = async () => {
     <>
       <DrawerContentScrollView {...props}>
         {/* <Animated.View style={{transform: [{translateX}]}}> */}
-        <TouchableOpacity
+
+          <View style={styles.drawerHeader}>
+          <TouchableOpacity
             style={styles.button}
             onPress={async () => {
-              const response = await pickImage();
+               await pickImage();
               // console.log(response);
               // if (response?.imageData) {
               //   setImage(response.uri);
@@ -205,16 +209,17 @@ const pickImage = async () => {
               // }
               }}
               >
-          <View style={styles.drawerHeader}>
             <View style={styles.profPic}>
             <ImageBackground style={{width: 70, height: 70, borderRadius: 50, flex: 1, alignItems: 'center', justifyContent: 'center'}}><Image source={{ uri: profilePic }} style={{width: 65, height: 65, borderRadius: 50}}></Image></ImageBackground>
             {/* <Image source={require('../../assets/favicon.png')} style={{width: 40, height: 40, }}></Image> */}
             </View>
+            </TouchableOpacity>
             <Text style={{color: 'black', margin: 10, marginTop: 10}}>
-              PUT USER EMAIL AND OTHER PROPER INFO HERE
+              {/* PUT USER EMAIL AND OTHER PROPER INFO HERE */}
+              {userEmail}
             </Text>
           </View>
-        </TouchableOpacity>
+        
         <DrawerItemList {...props}/>
         
         <DrawerItem
