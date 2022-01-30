@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  Pressable
 } from 'react-native';
 
   const CustomButton = ({onPress, text, type = 'PRIMARY', bgColor, fgColor}) => {

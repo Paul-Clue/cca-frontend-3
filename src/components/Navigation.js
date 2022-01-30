@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from "react";
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StyleSheet, Image } from 'react-native';
@@ -12,8 +12,12 @@ import ForgotPasswordScreen from "../Screens/ForgotPasswordScreen";
 import NewPasswordScreen from "../Screens/NewPasswordScreen";
 import HomeScreen from "../Screens/HomeScreen";
 import MyDrawer2 from './MyDrawer2';
-import ProfileModal from '../Screens/ProfileModal'
+import PostScreen from '../Screens/PostScreen';
+import EditProfile from '../Screens/EditProfile';
+import ProfileScreen from '../Screens/ProfileScreen'
+import Browser from '../Screens/Browser';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { RotateInUpLeft } from 'react-native-reanimated';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -24,7 +28,7 @@ function MyDrawer() {
   return (
       <Drawer.Navigator
       drawerContent={props => <MyDrawer2 {...props}/>}
-      initialRouteName="Home"
+      initialRouteName="Login2"
       screenOptions={{
         drawerStyle: {
           backgroundColor: 'whitesmoke',
@@ -34,35 +38,49 @@ function MyDrawer() {
         swipeEnabled: true,
       }}
       >
-        <Drawer.Screen
-        name="Home Screen"
-        component={HomeScreen}
+      <Drawer.Screen
+        name="Home"
+        component={MyTabs}
         options={{
           drawerIcon: () => (
-            <Icon name='home' color='navy'/>
+            <Icon name='house' color='whitesmoke'/>
           ),
           headerStyle: {
             backgroundColor: '#3B71F3',
+
           },
-          // headerRight: () => (
-          //   <Icon name= 'search' color='black'/>
-          // )
+          title: '',
+          headerShown: true,
         }}
-        
+  
         />
+
+        <Drawer.Screen
+          name='Profile'
+          component={ProfileScreen}
+          options={{
+            drawerIcon: () => (
+              <Icon name='person' color='navy'/>
+            ),
+            headerStyle: {
+              backgroundColor: '#3B71F3',
+            },
+          }}
+        />
+
         {/* <Drawer.Screen
-        name="Login2"
-        component={Login2}
-        options={{
-          drawerIcon: () => (
-            <Icon name='login' color='navy'/>
-          ),
-          drawerContentContainerStyle: {
-            backgroundColor: 'yellow',
-            marginTop: 200
-          }
-        }}
+          name="Login2"
+          component={Login2}
+          options={{
+            drawerIcon: () => (
+              <Icon name='login' color='navy'/>
+            ),
+            headerStyle: {
+              backgroundColor: 'yellow',
+            },
+          }}
         /> */}
+        
 
       </Drawer.Navigator>
   );
@@ -70,59 +88,78 @@ function MyDrawer() {
 
 function MyTabs() {
   return (
+    
     <Tab.Navigator>
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: () => (
+              <Icon name='home' color='whitesmoke'/>
+            ),
+            headerStyle: {
+              backgroundColor: '#3B71F3',
+            },
+            tabBarStyle: { backgroundColor: '#3B71F3' },
+            headerShown: true,
+          }}
+        />
+        <Tab.Screen
+        name="PostScreen"
+        component={PostScreen}
         options={{
+          headerStyle: {
+            backgroundColor: '#3B71F3',
+          },
           tabBarIcon: () => (
-            <Icon name='home' color='navy'/>
+            <Icon name='chat' color='whitesmoke'/>
           ),
         }}
         />
-      {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
+
+      <Tab.Screen
+          name="Login2"
+          component={Login2}
+          options={{
+            tabBarIcon: () => (
+              <Icon name='login' color='whitesmoke'/>
+            ),
+            headerStyle: {
+              backgroundColor: 'yellow',
+              tabBarStyle: { display: 'none' }
+            },
+            tabBarStyle: { display: 'none' }
+          }}
+        />
+
     </Tab.Navigator>
   );
 }
 
-const RootStackForModal = () =>{
-  return(
-    <NavigationContainer>
-      <RootStack.Navigator mode="modal" screenOptions={{headerShown: false}}>
-      <RootStack.Screen name='ScreensForStack' component={ScreensForStack}/>
-        <RootStack.Screen name='ProfileModal' component={ProfileModal}/>
-      </RootStack.Navigator>
-    </NavigationContainer>
-  )
-}
-
 const ScreensForStack = () =>{
   return(
-      <Stack.Navigator screenOptions={{headerShown: false}} >
-        <Stack.Screen name={'Login2'} component={Login2} />
-        <Stack.Screen name={'SignUpScreen'} component={SignUpScreen} />
-        <Stack.Screen name={'ConfirmEmailScreen'} component={ConfirmEmailScreen} />
-        <Stack.Screen name={'ForgotPasswordScreen'} component={ForgotPasswordScreen} />
-        <Stack.Screen name={'NewPasswordScreen'} component={NewPasswordScreen} />
-        <Stack.Screen
-        name={'HomeScreen'}
-        component={MyTabs, MyDrawer}
-        // options={{
-        //   headerStyle: {
-        //     title: 'My Home',
-        //     backgroundColor: 'yellow'
-        //   }
-        // }}
-        />
-        {/* <Stack.Screen name={'HomeScreen'} component={MyTabs} /> */}
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="HomeScreen">
+      <Stack.Screen name={'Bottom'} component={MyDrawer} options={{headerShown: false}}/>
+      <Stack.Screen name={'EditProfile'} component={EditProfile} options={{headerShown: true}}/>
+      <Stack.Screen name={'ProfileScreen'} component={ProfileScreen} />
+      {/* <Stack.Screen name={'Login2'} component={Login2} /> */}
+      <Stack.Screen name={'PostScreen'} component={PostScreen} options={{headerShown: true}}/>
+      <Stack.Screen name={'SignUpScreen'} component={SignUpScreen} />
+      <Stack.Screen name={'ConfirmEmailScreen'} component={ConfirmEmailScreen} />
+      <Stack.Screen name={'ForgotPasswordScreen'} component={ForgotPasswordScreen} />
+      <Stack.Screen name={'NewPasswordScreen'} component={NewPasswordScreen} />
+      <Stack.Screen name={'Browser'} component={Browser} />
       </Stack.Navigator>
+      </NavigationContainer>
   )
 }
 
 
  const Navigation = () => {
   return (
-    <RootStackForModal/>
+    <ScreensForStack/>
+
   )
 };
 

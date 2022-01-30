@@ -18,15 +18,18 @@ import {
   ScrollView,
   // SafeAreaView,
   // ImageBackground,
-  // Image,
-  // TouchableOpacity,
+  Image,
+  TouchableOpacity,
   // useWindowDimensions,
   // Button,
+  Linking,
   Platform,
 } from 'react-native';
+import WebView from 'react-native-webview';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 // import { ScreenStackHeaderBackButtonImage } from 'react-native-screens';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import MobileStoreButton from 'react-mobile-store-button';
 
 const ACCESS_TOKEN = 'access_token';
 const USER = 'user';
@@ -39,6 +42,7 @@ const USER = 'user';
   const [image, setImage] = useState(null);
   const [imageData, setImageData] = useState(null);
   const [photoUri, setPhotoUri] = useState(null);
+  const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.google.android.apps.meetings&hl=en&gl=US'
   // const [playing, setPlaying] = useState(false);
 
   // const togglePlaying = () => {
@@ -50,8 +54,14 @@ const USER = 'user';
   // },[])
   const GoToProfile = () => {
     console.log('Button Push worked');
-    navigation.navigate('ProfileModal');
+    navigation.navigate('EditProfile');
   }
+
+  const GoToGoogleMeets = () => {
+    // Linking.openURL('https://play.google.com/store/apps/details?id=com.google.android.apps.meetings&hl=en&gl=US');
+    navigation.navigate('Browser');
+  }
+
   const navigation = useNavigation();
   const removeToken = async () => {
     try {
@@ -195,7 +205,9 @@ const USER = 'user';
             {/* <FontAwesome.Button name="facebook" backgroundColor="#3b5998" onPress={loginWithFacebook}>
               Login with Facebook
             </FontAwesome.Button> */}
-            <View style={{borderWidth: 1, borderColor: 'goldenrod', borderRadius: 20}}>
+            <View
+            style={{borderWidth: 1, borderColor: 'goldenrod', borderRadius: 20, marginTop: 10}}
+            >
               <YoutubePlayer
                 height={300}
                 width={410}
@@ -213,7 +225,11 @@ const USER = 'user';
                     underlineColorAndroid="transparent"
                     icon='search'
                 /> */}
-                <Text style={{color: 'whitesmoke', fontSize: 30, fontWeight: 'bold'}}>WELCOME</Text>
+                <Text
+                style={{color: 'whitesmoke', fontSize: 30, fontWeight: 'bold', marginTop: -20}}
+                >
+                  WELCOME
+                </Text>
                 <Text style={{color: 'whitesmoke'}}>
                   CCA wants you to have a swift and successful reentry.
                   So we created this app to help you accomplish some of the
@@ -228,58 +244,35 @@ const USER = 'user';
             /> */}
             {/* </ContentLoader> */}
 
-              <View style={{width: '80%', alignItems: 'center', marginTop: '10%'}}>
+              <View
+              style={{width: '80%', alignItems: 'center', marginTop: '2%'}}
+              >
                 <CustomButton
                   text='Edit Profile'
                   onPress={GoToProfile}
                 />
-                <CustomButton
+                {/* <CustomButton
                   text='Download Google Meets'
                   // onPress={checkButton}
-                />
+                /> */}
+                <View>
+                <TouchableOpacity onPress={GoToGoogleMeets}>
+                  <Image
+                    source={require('../../assets/google-play-badge.png')}
+                    style={{height: '20%', marginTop: '15%', marginBottom: '47%'}}
+                  >
+                  </Image>
+                  </TouchableOpacity>
+                </View>
+              
             </View>
+            
 
           </View>
         </View>
-        
-        {/* <View style={styles.pic}>
-         <TouchableOpacity
-            style={styles.button}
-            onPress={async () => {
-              const response = await pickImage();
-              // console.log(response);
-              // if (response?.imageData) {
-              //   setImage(response.uri);
-              //   console.warn(image);
-              //   setImageData(response?.imageData);
-              // }
-              }}
-              >
-            <Text style={styles.text}> Pick An Image </Text>
-            <Image source={{ uri: photoUri }} style={styles.backgroundImage} ></Image>
-          </TouchableOpacity>
-          </View> */}
    
     {/* </View> */}
   </ScrollView>
-
-    // <View style={styles.container}>
-    //   <Camera style={styles.camera} type={type}>
-    //     <View style={styles.buttonContainer}>
-    //       <TouchableOpacity
-    //         style={styles.button}
-    //         onPress={() => {
-    //           setType(
-    //             type === Camera.Constants.Type.back
-    //               ? Camera.Constants.Type.front
-    //               : Camera.Constants.Type.back
-    //           );
-    //         }}>
-    //         <Text style={styles.text}> Flip </Text>
-    //       </TouchableOpacity>
-    //     </View>
-    //   </Camera>
-    // </View>
 
   )
 };
@@ -313,7 +306,13 @@ pic: {
   width: 300,
   height: 300,
   backgroundColor: 'red',
-}
+},
+WebViewStyle: {
+  justifyContent: 'center',
+  alignItems: 'center',
+  flex:1,
+  marginTop: (Platform.OS) === 'ios' ? 20 : 0
+},
 
 });
 

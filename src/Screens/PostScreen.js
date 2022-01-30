@@ -13,11 +13,13 @@ import {
 } from 'react-native';
 
 
- const ProfileModal = () => {
+ const PostScreen = () => {
   return (
-    <View>
-      <Text> This is the Profile Modal </Text>
-    </View>
+    <ScrollView style={{marginTop: '30%'}}>
+      <View style={{alignItems: 'center', justifyContent: 'center'}}>
+        <Text> Posts Here </Text>
+      </View>
+    </ScrollView>
   )
 };
 
@@ -28,4 +30,4 @@ container: {
 
 });
 
-export default ProfileModal;
+export default PostScreen;
