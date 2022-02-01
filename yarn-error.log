@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\paulc\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add react-native-safe-area-context@3.3.2
+  C:\Program Files\nodejs\node.exe C:\Users\paulc\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add react-native-date-picker
 
 PATH: 
   ;C:\Python39\Scripts\;C:\Python39\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files\nodejs\;C:\Users\paulc\scoop\shims;C:\Program Files\PostgreSQL\13\bin;C:\Ruby27-x64\bin;C:\Users\paulc\scoop\shims;C:\Ruby30-x64\bin;C:\Users\paulc\AppData\Local\Microsoft\WindowsApps;C:\Users\paulc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\JetBrains\RubyMine 2020.3.1\bin;C:\src\flutter_windows_1.22.5-stable\flutter\bin;C:\Users\paulc\AppData\Local\Android\Sdk\tools;C:\Users\paulc\AppData\Local\Android\Sdk\platform-tools;C:\Program Files\heroku\bin;C:\sqlite;C:\Users\paulc\AppData\Roaming\npm;C:\Program Files\PostgreSQL\13\bin;C:\Program Files\ImageMagick-7.0.11-Q16-HDRI
@@ -56,6 +56,7 @@ npm manifest:
       "native-base": "^2.8.2",
       "react": "17.0.1",
       "react-dom": "17.0.1",
+      "react-mobile-store-button": "^0.0.6",
       "react-native": "0.64.3",
       "react-native-easy-content-loader": "^0.3.2",
       "react-native-elements": "^3.4.2",
@@ -5294,6 +5295,14 @@ Lockfile:
     "resolved" "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
     "version" "17.0.2"
   
+  "react-mobile-store-button@^0.0.6":
+    "integrity" "sha512-TJuQXXcyVpf4XPvql0X2yqSrnsM4KBkwRNzn74hbe+ykfAS31dNZa9DxUjU9aey+X+MXs/q3ewRw2O5XSJgwHg=="
+    "resolved" "https://registry.npmjs.org/react-mobile-store-button/-/react-mobile-store-button-0.0.6.tgz"
+    "version" "0.0.6"
+    dependencies:
+      "prop-types" "^15.6.0"
+      "react" "^16.2.0"
+  
   "react-native-codegen@^0.0.6":
     "integrity" "sha512-cMvrUelD81wiPitEPiwE/TCNscIVauXxmt4NTGcy18HrUd0WRWXfYzAQGXm0eI87u3NMudNhqFj2NISJenxQHg=="
     "resolved" "https://registry.npmjs.org/react-native-codegen/-/react-native-codegen-0.0.6.tgz"
@@ -5556,6 +5565,15 @@ Lockfile:
     dependencies:
       "loose-envify" "^1.1.0"
       "object-assign" "^4.1.1"
+  
+  "react@^16.2.0":
+    "integrity" "sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g=="
+    "resolved" "https://registry.npmjs.org/react/-/react-16.14.0.tgz"
+    "version" "16.14.0"
+    dependencies:
+      "loose-envify" "^1.1.0"
+      "object-assign" "^4.1.1"
+      "prop-types" "^15.6.2"
   
   "react@^16.8.0":
     "integrity" "sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g=="

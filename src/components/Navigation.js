@@ -15,6 +15,7 @@ import MyDrawer2 from './MyDrawer2';
 import PostScreen from '../Screens/PostScreen';
 import EditProfile from '../Screens/EditProfile';
 import ProfileScreen from '../Screens/ProfileScreen'
+import CaseManagerScreen from '../Screens/CaseManagerScreen';
 import Browser from '../Screens/Browser';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RotateInUpLeft } from 'react-native-reanimated';
@@ -51,6 +52,7 @@ function MyDrawer() {
           },
           title: '',
           headerShown: true,
+          headerTintColor: 'whitesmoke'
         }}
   
         />
@@ -61,6 +63,23 @@ function MyDrawer() {
           options={{
             drawerIcon: () => (
               <Icon name='person' color='navy'/>
+            ),
+            headerStyle: {
+              backgroundColor: '#3B71F3',
+            },
+            headerTitleStyle: {
+              fontWeight: 'bold'
+            },
+            headerTintColor: 'whitesmoke'
+          }}
+        />
+
+        <Drawer.Screen
+          name='Case Manager'
+          component={CaseManagerScreen}
+          options={{
+            drawerIcon: () => (
+              <Icon name='people' color='navy'/>
             ),
             headerStyle: {
               backgroundColor: '#3B71F3',
@@ -89,7 +108,7 @@ function MyDrawer() {
 function MyTabs() {
   return (
     
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={{tabBarActiveTintColor: 'goldenrod', tabBarInactiveTintColor: 'whitesmoke', }}>
       <Tab.Screen
           name="Home"
           component={HomeScreen}
@@ -100,10 +119,18 @@ function MyTabs() {
             headerStyle: {
               backgroundColor: '#3B71F3',
             },
+            headerTitleStyle: {
+              fontWeight: 'bold',
+              color: 'whitesmoke'
+            },
             tabBarStyle: { backgroundColor: '#3B71F3' },
             headerShown: true,
+            title: 'Home',
+
           }}
         />
+
+
         <Tab.Screen
         name="PostScreen"
         component={PostScreen}
@@ -141,7 +168,21 @@ const ScreensForStack = () =>{
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="HomeScreen">
       <Stack.Screen name={'Bottom'} component={MyDrawer} options={{headerShown: false}}/>
-      <Stack.Screen name={'EditProfile'} component={EditProfile} options={{headerShown: true}}/>
+      <Stack.Screen
+        name={'EditProfile'}
+        component={EditProfile}
+        options={{
+          headerShown: true,
+          headerStyle: {
+                backgroundColor: '#3B71F3',
+              },
+              headerTitleStyle: {
+                fontWeight: 'bold',
+                color: 'whitesmoke'
+              },
+              headerTintColor: 'whitesmoke'
+            }}
+      />
       <Stack.Screen name={'ProfileScreen'} component={ProfileScreen} />
       {/* <Stack.Screen name={'Login2'} component={Login2} /> */}
       <Stack.Screen name={'PostScreen'} component={PostScreen} options={{headerShown: true}}/>
@@ -150,6 +191,7 @@ const ScreensForStack = () =>{
       <Stack.Screen name={'ForgotPasswordScreen'} component={ForgotPasswordScreen} />
       <Stack.Screen name={'NewPasswordScreen'} component={NewPasswordScreen} />
       <Stack.Screen name={'Browser'} component={Browser} />
+      <Stack.Screen name={'CaseManagerScreen'} component={CaseManagerScreen} />
       </Stack.Navigator>
       </NavigationContainer>
   )
