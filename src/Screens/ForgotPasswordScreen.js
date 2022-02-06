@@ -34,7 +34,7 @@ const ForgotPasswordScreen = () => {
       setEmailError('');
       console.warn('It went through.');
       try{
-        let response = await fetch('https://5bdf-72-252-198-169.ngrok.io/api/v1/passchangecode', {
+        let response = await fetch('https://e955-72-252-198-169.ngrok.io/api/v1/passchangecode', {
 
         // let response = await fetch('https://0692-64-64-117-139.ngrok.io/api/v1/passchangecode', {
           // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {

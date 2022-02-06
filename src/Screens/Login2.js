@@ -152,12 +152,7 @@ const Login2 = () => {
       setEmailError( '');
       setPasswordError( '');
       try{
-        // const token = JSON.parse(sessionStorage.getItem('CurrentUser')) || '';
-        // const credential = await Keychain.getGenericPassword();
-        // const token = JSON.parse(credential.jwt)
-        // let response = await fetch('http://localhost:3001/api/v1/login', {
-        let response = await fetch('https://5bdf-72-252-198-169.ngrok.io/api/v1/login', {
-          // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
+        let response = await fetch('https://e955-72-252-198-169.ngrok.io/api/v1/login', {
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -184,7 +179,7 @@ const Login2 = () => {
           storeUser(theUser);
           setEmail('');
           setPassword('');
-          navigation.navigate('HomeScreen');
+          navigation.navigate('Home');
           // console.warn(response);
         }else{
           // errors = res.;

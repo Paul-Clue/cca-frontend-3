@@ -18,9 +18,6 @@ const ACCESS_TOKEN = 'access_token';
 const USER = 'user';
 
 function MyDrawer2 ({progress,...props}){
-  // const [hasPermission, setHasPermission] = useState(null);
-  // const [type, setType] = useState(Camera.Constants.Type.back);
-  // const navigation = useNavigation();
   const [profilePic, setProfilePic] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
@@ -46,7 +43,7 @@ function MyDrawer2 ({progress,...props}){
     setUserEmail(theUser.res.user.email);
     
       try{
-        let img = await fetch (`https://5bdf-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
+        let img = await fetch (`https://e955-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
           method: 'Get',
           headers: {
             'Accept': 'application/json',
@@ -97,7 +94,7 @@ const cloudinaryUpload = async (photo) => {
       let userId = theUser.res.user.id;
       console.log(theUser.res.user.id);
       try{
-        fetch (`https://5bdf-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+        fetch (`https://e955-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -117,9 +114,6 @@ const cloudinaryUpload = async (photo) => {
   }catch (errors) {
     console.log('errors caught: ' + errors);
   }
-  
-
-  
 }
 
 const pickImage = async () => {
@@ -157,7 +151,6 @@ const pickImage = async () => {
 }
 }
 
-
   const removeToken = async () => {
     try {
       await AsyncStorage.removeItem(ACCESS_TOKEN);
@@ -171,26 +164,7 @@ const pickImage = async () => {
     props.navigation.closeDrawer();
     props.navigation.navigate('Login2');
   }
- 
-  // useEffect (() => {
-  //   (async () => {
-  //     const { status } = await Camera.requestPermissionsAsync();
-  //     setHasPermission(status === 'granted');
-  //   })();
-  // }, []);
-  
-  // if (hasPermission === null){
-  //   // return <View />;
-  //   console.log('hasPermission is null.');
-  // }
-  // if (hasPermission === false) {
-  //   console.log('hasPermission is false.');
-  // }
 
-  // const translateX = Animated.interpolateNode(progress, {
-  //   inputRange: [0, 100],
-  //   outputRange: [0, 0],
-  // });
   return(
     <>
       <DrawerContentScrollView {...props}>
@@ -210,7 +184,26 @@ const pickImage = async () => {
               }}
               >
             <View style={styles.profPic}>
-            <ImageBackground style={{width: 70, height: 70, borderRadius: 50, flex: 1, alignItems: 'center', justifyContent: 'center'}}><Image source={{ uri: profilePic }} style={{width: 65, height: 65, borderRadius: 50}}></Image></ImageBackground>
+            <ImageBackground
+              style={{
+                width: 70,
+                height: 70,
+                borderRadius: 50,
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center'
+                }}>
+                <Image
+                  source={{
+                    uri: profilePic
+                    }}
+                  style={{
+                    width: 65,
+                    height: 65,
+                    borderRadius: 50
+                    }}>
+                </Image>
+            </ImageBackground>
             {/* <Image source={require('../../assets/favicon.png')} style={{width: 40, height: 40, }}></Image> */}
             </View>
             </TouchableOpacity>

@@ -124,7 +124,7 @@ const USER = 'user';
         let userId = theUser.res.user.id;
         console.log(theUser.res.user.id);
         try{
-          fetch (`https://5bdf-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+          fetch (`https://e955-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
             method: 'Post',
             headers: {
               'Accept': 'application/json',

@@ -15,7 +15,7 @@ import {
   TextInput
 } from 'react-native';
 
- const FieldInput = ({value, setValue, placeholder, secureTextEntry, Error = '', icon = ''}) => {
+ const FieldInput = ({value, setValue, defaultValue = '',placeholder, secureTextEntry, Error = '', icon = ''}) => {
   return (
     <View style={[styles.container, Error ? {borderColor: 'red', borderWidth: 2, backgroundColor: '#faebd7'} : {},]}>
       <Icon style={styles.icon} name={icon} size={20} color="lightgray"/>
@@ -25,6 +25,7 @@ import {
       style={styles.input}
       placeholder={placeholder}
       secureTextEntry={secureTextEntry}
+      defaultValue={defaultValue}
       />
     </View>
   )

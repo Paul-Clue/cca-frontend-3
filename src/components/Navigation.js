@@ -19,6 +19,8 @@ import CaseManagerScreen from '../Screens/CaseManagerScreen';
 import Browser from '../Screens/Browser';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RotateInUpLeft } from 'react-native-reanimated';
+import { Provider } from 'react-redux';
+import { Store } from '../redux/store'
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -153,7 +155,6 @@ function MyTabs() {
             ),
             headerStyle: {
               backgroundColor: 'yellow',
-              tabBarStyle: { display: 'none' }
             },
             tabBarStyle: { display: 'none' }
           }}
@@ -183,7 +184,20 @@ const ScreensForStack = () =>{
               headerTintColor: 'whitesmoke'
             }}
       />
-      <Stack.Screen name={'ProfileScreen'} component={ProfileScreen} />
+      <Stack.Screen name={'Profile'}
+      component={ProfileScreen}
+      options={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: '#3B71F3',
+        },
+        headerTitleStyle: {
+          fontWeight: 'bold'
+        },
+        headerTintColor: 'whitesmoke'
+      }}
+      
+      />
       {/* <Stack.Screen name={'Login2'} component={Login2} /> */}
       <Stack.Screen name={'PostScreen'} component={PostScreen} options={{headerShown: true}}/>
       <Stack.Screen name={'SignUpScreen'} component={SignUpScreen} />
@@ -192,6 +206,7 @@ const ScreensForStack = () =>{
       <Stack.Screen name={'NewPasswordScreen'} component={NewPasswordScreen} />
       <Stack.Screen name={'Browser'} component={Browser} />
       <Stack.Screen name={'CaseManagerScreen'} component={CaseManagerScreen} />
+      <Stack.Screen name={'Home'} component={MyTabs} />
       </Stack.Navigator>
       </NavigationContainer>
   )
@@ -200,8 +215,9 @@ const ScreensForStack = () =>{
 
  const Navigation = () => {
   return (
-    <ScreensForStack/>
-
+    <Provider store={Store}>
+      <ScreensForStack/>
+    </Provider>
   )
 };
 
