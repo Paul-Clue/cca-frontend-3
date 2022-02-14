@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useSelector } from "react";
+import { useDispatch } from 'react-redux';
 import * as Keychain from 'react-native-keychain';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
@@ -13,6 +14,7 @@ import ContentLoader from "react-native-easy-content-loader";
 import Loader from 'react-native-easy-content-loader';
 import Load from "react-native-loading-gif";
 import "react-native-url-polyfill/auto";
+import { setNamed, setPhoneNumbers, setAddresss, setRelease } from '../redux/actions';
 
 import {
   StyleSheet,
@@ -55,6 +57,9 @@ const USER = 'user';
 const Login2 = () => {
   // const Load = useRef();
   // const [loading, setLoading] = useState();
+  // const { storedInfoName } = useSelector(state => state.userReducer);
+  const dispatch = useDispatch();
+
   useEffect( () => {
     checkForToken();
     // setTimeout(() => setLoading(false), 2000);
@@ -152,7 +157,7 @@ const Login2 = () => {
       setEmailError( '');
       setPasswordError( '');
       try{
-        let response = await fetch('https://e955-72-252-198-169.ngrok.io/api/v1/login', {
+        let response = await fetch('https://5254-72-252-198-169.ngrok.io/api/v1/login', {
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -168,7 +173,6 @@ const Login2 = () => {
         });
         // console.warn(response.text())
         let res = await response.json();
-        
 
         if(response.status >= 200 && response.status < 300) {
           setErr('');
@@ -181,6 +185,18 @@ const Login2 = () => {
           setPassword('');
           navigation.navigate('Home');
           // console.warn(response);
+
+            let user = await AsyncStorage.getItem(USER);
+            let theUser2 = JSON.parse(user);
+            let theUserName = theUser2.res.user.username;
+            let theUserPhone = theUser2.res.user.phone_number;
+            let theUserAddress = theUser2.res.user.address;
+            let theUserRelease = theUser2.res.user.release_date;
+
+            dispatch(setNamed(theUserName));
+            dispatch(setPhoneNumbers(theUserPhone));
+            dispatch(setAddresss(theUserAddress));
+            dispatch(setRelease(theUserRelease));
         }else{
           // errors = res.;
           removeToken();

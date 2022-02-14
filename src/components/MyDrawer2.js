@@ -43,7 +43,7 @@ function MyDrawer2 ({progress,...props}){
     setUserEmail(theUser.res.user.email);
     
       try{
-        let img = await fetch (`https://e955-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
+        let img = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
           method: 'Get',
           headers: {
             'Accept': 'application/json',
@@ -94,7 +94,7 @@ const cloudinaryUpload = async (photo) => {
       let userId = theUser.res.user.id;
       console.log(theUser.res.user.id);
       try{
-        fetch (`https://e955-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+        fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
           method: 'Post',
           headers: {
             'Accept': 'application/json',

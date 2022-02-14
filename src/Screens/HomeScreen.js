@@ -1,6 +1,7 @@
 // import RNFetchBlob from 'react-native-fetch-blob';
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import CustomButton from "../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,6 +31,7 @@ import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 // import { ScreenStackHeaderBackButtonImage } from 'react-native-screens';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import MobileStoreButton from 'react-mobile-store-button';
+import { setManagerList } from '../redux/actions';
 
 const ACCESS_TOKEN = 'access_token';
 const USER = 'user';
@@ -37,6 +39,9 @@ const USER = 'user';
 
 
  const HomeScreen = () => {
+  const { storedInfoManagerList } = useSelector(state => state.userReducer);
+  const dispatch = useDispatch();
+
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [image, setImage] = useState(null);
@@ -78,6 +83,7 @@ const USER = 'user';
   }
 
   const loginWithFacebook = () => { console.log('You logged in!') }
+  
   useEffect (() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -89,6 +95,25 @@ const USER = 'user';
           alert('Sorry we need camera role permissions to make this work.');
         }
       }
+
+      try{
+        let users = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/users`,{
+         method: 'Get',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json',
+         },
+       });
+
+     let users1 = await users.json();
+
+     dispatch(setManagerList(users1));
+     console.warn(storedInfoManagerList);
+
+
+     }catch (error) {
+       console.log(error);
+     }
     })();
   }, []);
   
@@ -124,7 +149,7 @@ const USER = 'user';
         let userId = theUser.res.user.id;
         console.log(theUser.res.user.id);
         try{
-          fetch (`https://e955-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+          fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
             method: 'Post',
             headers: {
               'Accept': 'application/json',

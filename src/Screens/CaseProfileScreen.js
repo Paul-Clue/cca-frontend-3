@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import FieldInput from '../components/FieldInput';
 import CustomButton from '../components/CustomButton';
 import { useNavigation } from "@react-navigation/native";
@@ -25,6 +26,17 @@ const ACCESS_TOKEN = 'access_token';
 const USER = 'user';
 
  const ProfileScreen = () => {
+  const { storedInfoCaseProfile } = useSelector(state => state.userReducer);
+  // console.warn(storedInfoCaseProfile);
+
+  //  let navParam = 'Did not set.';
+  //  const setNavigationParam = () => {
+  //   const { navigation } = props;
+  //   navParam = JSON.stringify(navigation.getParam('userId', 'NO-ID'))
+  //  };
+
+  //  setNavigationParam();
+
   const [profilePic, setProfilePic] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [userName, setUserName] = useState(null);
@@ -33,24 +45,25 @@ const USER = 'user';
   const [userAddress, setUserAddress] = useState(null);
 
   const navigation = useNavigation();
+  // console.warn(navParam);
 
-  const getUserInfo = async () => {
-  const user1 = await AsyncStorage.getItem(USER);
-  const theUser1 = JSON.parse(user1);
-   setUserName(theUser1.res.user.username);
-   setUserEmail(theUser1.res.user.email);
-   setUserPhoneNumber(theUser1.res.user.phone_number);
-   setUserAddress(theUser1.res.user.address);
-  };
-  getUserInfo();
+  // const getUserInfo = async () => {
+  // const user1 = await AsyncStorage.getItem(USER);
+  // const theUser1 = JSON.parse(user1);
+  //  setUserName(theUser1.res.user.username);
+  //  setUserEmail(theUser1.res.user.email);
+  //  setUserPhoneNumber(theUser1.res.user.phone_number);
+  //  setUserAddress(theUser1.res.user.address);
+  // };
+  // getUserInfo();
 
   useEffect (() => {
     (async () => {
       // const { status } = await Camera.requestCameraPermissionsAsync();
       // setHasPermission(status === 'granted');
       navigation.addListener('focus', () => {
-        getUserInfo();
-        console.warn(userName);
+        // getUserInfo();
+        // console.warn(userName);
       });
 
       if (Platform.OS !== 'web') {
@@ -65,12 +78,12 @@ const USER = 'user';
   }, [navigation]);
 
   const runPic = async () => {
-    let user = await AsyncStorage.getItem(USER);
-    let theUser = JSON.parse(user);
-    let userId = theUser.res.user.id;
+    // let user = await AsyncStorage.getItem(USER);
+    // let theUser = JSON.parse(user);
+    // let userId = theUser.res.user.id;
 
       try{
-        let img = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
+        let img = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/profilepic/${storedInfoCaseProfile}`,{
           method: 'Get',
           headers: {
             'Accept': 'application/json',
@@ -88,7 +101,7 @@ const USER = 'user';
         
         const pic1 = await img.json();
         const pic2 = pic1.user;
-       setProfilePic(pic2);
+        setProfilePic(pic2);
     
       }catch (error) {
         console.log(error);
@@ -119,9 +132,9 @@ const cloudinaryUpload = async (photo) => {
       let user = await AsyncStorage.getItem(USER);
       let theUser = JSON.parse(user);
       let userId = theUser.res.user.id;
-      console.log(theUser.res.user.id);
+      // console.log(theUser.res.user.id);
       try{
-        fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+        fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`,{
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -179,9 +192,36 @@ const pickImage = async () => {
 }
 
   const GoToEditProfile = () => {
-    // alert('Please be advised that every time that you access this this screen, you must re-fill and resubmit all of the required fields, or your profile info will be incorrect!!');
+    alert('Please be advised that every time that you access this this screen, you must re-fill and resubmit all of the required fields, or your profile info will be incorrect!!');
     navigation.navigate('EditProfile');
   }
+
+  const setInfo = async () => {
+    try{
+      const info = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`,{
+        method: 'Get',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      let info2 = await info.json();
+
+      setUserName(info2.user.username);
+      setUserEmail(info2.user.email);
+      setUserPhoneNumber(info2.user.phone_number);
+      setUserAddress(info2.user.address);
+
+      console.log(info2.user.username);
+
+    }catch (error) {
+      console.log(error);
+    }
+
+  }
+
+  setInfo();
 
   return (
     <ScrollView style={{marginTop: 0, flex: 1, backgroundColor: 'black'}}>
