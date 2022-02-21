@@ -126,7 +126,7 @@ const USER = 'user';
 
     // console.log(`This is the token: ${theUser.res.jwt}`)
       try{
-        let userProfile = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+        let userProfile = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -550,7 +550,7 @@ const USER = 'user';
 
                 // console.log(`This is the token: ${theUser.res.jwt}`)
                   try{
-                    let userProfile = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+                    let userProfile = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
                       method: 'Post',
                       headers: {
                         'Accept': 'application/json',
@@ -612,7 +612,7 @@ const USER = 'user';
                 console.warn(`509 this is manager ${employed}`)
 
                   try{
-                    let userProfile = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+                    let userProfile = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
                       method: 'Post',
                       headers: {
                         'Accept': 'application/json',

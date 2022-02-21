@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import FieldInput from '../components/FieldInput';
 import CustomButton from '../components/CustomButton';
 import { useNavigation } from "@react-navigation/native";
@@ -6,7 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-
+import { setUsersMeets } from '../redux/actions'
 import { Icon } from 'react-native-elements';
 import {
   StyleSheet,
@@ -25,12 +26,22 @@ const ACCESS_TOKEN = 'access_token';
 const USER = 'user';
 
  const ProfileScreen = () => {
+  const dispatch = useDispatch();
+
+  const { storedInfoCaseProfile } = useSelector(state => state.userReducer);
+  const { storedInfoMeets } = useSelector(state => state.userReducer);
+
+  // let user = await AsyncStorage.getItem(USER);
+  // let theUser = JSON.parse(user);
+  // let userMeeting = theUser.res.user.meeting;
+
   const [profilePic, setProfilePic] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [userName, setUserName] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
   const [userPhoneNumber, setUserPhoneNumber] = useState(null);
   const [userAddress, setUserAddress] = useState(null);
+  const [id, setId] = useState(null);
 
   const navigation = useNavigation();
 
@@ -41,10 +52,35 @@ const USER = 'user';
    setUserEmail(theUser1.res.user.email);
    setUserPhoneNumber(theUser1.res.user.phone_number);
    setUserAddress(theUser1.res.user.address);
+   setId(theUser1.res.user.id);
   };
   getUserInfo();
 
   useEffect (() => {
+
+    const runThis = async () => {
+      try{
+        let info = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${id}`,{
+          method: 'Get',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        const userInfo = await info.json();
+        const meets = userInfo.user.meeting;
+        console.warn(meets);
+        dispatch(setUsersMeets(meets));
+        // console.log(`Meets line 54: ${storedInfoMeets}`);
+        
+    
+      }catch (error) {
+        console.log(error);
+      }
+    };
+    runThis();
+
     (async () => {
       // const { status } = await Camera.requestCameraPermissionsAsync();
       // setHasPermission(status === 'granted');
@@ -70,7 +106,7 @@ const USER = 'user';
     let userId = theUser.res.user.id;
 
       try{
-        let img = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
+        let img = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
           method: 'Get',
           headers: {
             'Accept': 'application/json',
@@ -121,7 +157,7 @@ const cloudinaryUpload = async (photo) => {
       let userId = theUser.res.user.id;
       console.log(theUser.res.user.id);
       try{
-        fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+        fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -183,6 +219,33 @@ const pickImage = async () => {
     navigation.navigate('EditProfile');
   }
 
+//  const ActivateButton = async () => {
+
+//     try{
+//       const info = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`,{
+//         method: 'Get',
+//         headers: {
+//           'Accept': 'application/json',
+//           'Content-Type': 'application/json',
+//         },
+//       });
+
+//       let info2 = await info.json();
+//       let meet = info2.user.meeting
+
+//       console.log(meet);
+
+//     }catch (error) {
+//       console.log(error);
+//     }
+//     // navigation.navigate('EditProfile');
+//   }
+//   ActivateButton();
+const GoToCounselorMeeting = () => {
+  // Linking.openURL('https://play.google.com/store/apps/details?id=com.google.android.apps.meetings&hl=en&gl=US');
+  navigation.navigate('Browser2');
+}
+
   return (
     <ScrollView style={{marginTop: 0, flex: 1, backgroundColor: 'black'}}>
       <View style={{alignItems: 'center', justifyContent: 'center', flex: 1, marginTop: 30}}>
@@ -213,6 +276,17 @@ const pickImage = async () => {
               </View>
           </ImageBackground>
         </View>
+        {storedInfoMeets === 'yes' ?
+        <View style={{alignItems: 'center', justifyContent: 'center', marginTop: '5%'}}>
+          {/* <Text> This is the Profile Modal </Text> */}
+
+          <CustomButton
+            text='Go To Meeting With Your Counselor.'
+            onPress={GoToCounselorMeeting}
+          />
+        </View>
+        : null
+        }
 
           <View style={{marginLeft: '-10%', marginTop: '5%'}}>
             <Text

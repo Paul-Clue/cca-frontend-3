@@ -32,7 +32,7 @@ import {
   //   // let userId = theUser.res.user.id;
 
   //     try{
-  //        users = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/users`,{
+  //        users = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/users`,{
   //         method: 'Get',
   //         headers: {
   //           'Accept': 'application/json',

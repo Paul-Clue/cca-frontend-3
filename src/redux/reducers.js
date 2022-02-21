@@ -7,7 +7,9 @@ import {
   SET_USER_EMP_TYPE,
   SET_USER_WORK_HOURS,
   SET_MANAGER_LIST,
-  SET_CASE_PROFILE
+  SET_CASE_PROFILE,
+  SET_MANAGER,
+  SET_MEETS,
 } from './actions';
 
 const initialState = {
@@ -20,6 +22,8 @@ const initialState = {
   storedInfoWorkHours: '',
   storedInfoManagerList: '',
   storedInfoCaseProfile: '',
+  storedInfoManager: '',
+  storedInfoMeets: '',
   //create an initial state for the other variable.
 }
 
@@ -43,6 +47,10 @@ function userReducer(state = initialState, action){
         return {...state, storedInfoManagerList: action.payload};
     case SET_CASE_PROFILE:
         return {...state, storedInfoCaseProfile: action.payload};
+    case SET_MANAGER:
+        return {...state, storedInfoManager: action.payload};
+        case SET_MEETS:
+    return {...state, storedInfoMeets: action.payload};
       //Create another case for another variable if necessary.
       default:
         return state;

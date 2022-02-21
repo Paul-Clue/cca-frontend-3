@@ -39,6 +39,58 @@ const USER = 'user';
 
 
  const HomeScreen = () => {
+   const [id, setId] = useState(null);
+  const getUserInfo = async () => {
+    const user1 = await AsyncStorage.getItem(USER);
+    const theUser1 = JSON.parse(user1);
+     setId(theUser1.res.user.id);
+    };
+    getUserInfo();
+
+  const runThis = async () => {
+    try{
+      let info = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${id}`,{
+        method: 'Get',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const userInfo = await info.json();
+      const meets = userInfo.user.meeting;
+      console.warn(meets);
+      dispatch(setUsersMeets(meets));
+      // console.log(`Meets line 54: ${storedInfoMeets}`);
+      
+  
+    }catch (error) {
+      console.log(error);
+    }
+  };
+  runThis();
+
+  const checkForToken = async () => {
+    try {
+      let token = await AsyncStorage.getItem(ACCESS_TOKEN);
+      let checkUser = await AsyncStorage.getItem(USER);
+      let checkUser2 = JSON.parse(checkUser);
+      // console.log(JSON.stringify(checkUser2.res.user.user_type))
+
+      if(token){
+        console.log('No Token line 122');
+      } else {
+              // navigation.navigate('HomeScreen');
+              navigation.navigate('Login2');
+              // console.warn("This is the token:" + token);
+          }
+      }
+    // }
+    catch(error) {
+      console.log("Token collection error in getToken")
+    }
+  }
+  checkForToken();
   const { storedInfoManagerList } = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
@@ -97,7 +149,7 @@ const USER = 'user';
       }
 
       try{
-        let users = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/users`,{
+        let users = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/users`,{
          method: 'Get',
          headers: {
            'Accept': 'application/json',
@@ -108,8 +160,6 @@ const USER = 'user';
      let users1 = await users.json();
 
      dispatch(setManagerList(users1));
-     console.warn(storedInfoManagerList);
-
 
      }catch (error) {
        console.log(error);
@@ -149,7 +199,7 @@ const USER = 'user';
         let userId = theUser.res.user.id;
         console.log(theUser.res.user.id);
         try{
-          fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+          fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
             method: 'Post',
             headers: {
               'Accept': 'application/json',

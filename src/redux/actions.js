@@ -8,6 +8,8 @@ export const SET_USER_EMP_TYPE = 'SET_USER_EMP_TYPE';
 export const SET_USER_WORK_HOURS = 'SET_USER_WORK_HOURS';
 export const SET_MANAGER_LIST = 'SET_MANAGER_LIST';
 export const SET_CASE_PROFILE = 'SET_CASE_PROFILE';
+export const SET_MANAGER = 'SET_MANAGER';
+export const SET_MEETS = 'SET_MEETS';
 
 
 
@@ -79,6 +81,22 @@ export const setCaseProfile = storedInfoCaseProfile => dispatch => {
   dispatch({
     type: SET_CASE_PROFILE,
     payload: storedInfoCaseProfile,
+
+  });
+};
+
+export const setUsersManager = storedInfoManager => dispatch => {
+  dispatch({
+    type: SET_MANAGER,
+    payload: storedInfoManager,
+
+  });
+};
+
+export const setUsersMeets = storedInfoMeets => dispatch => {
+  dispatch({
+    type: SET_MEETS,
+    payload: storedInfoMeets,
 
   });
 };

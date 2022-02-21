@@ -37,7 +37,7 @@ const ConfirmEmailScreen = () => {
       setCodeError('');
 
       try{
-        let response = await fetch('https://5254-72-252-198-169.ngrok.io/api/v1/email_code', {
+        let response = await fetch('https://c06d-72-252-198-169.ngrok.io/api/v1/email_code', {
           // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
           method: 'Post',
           headers: {

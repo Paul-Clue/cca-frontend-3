@@ -7,7 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-
+import { setUsersMeets } from '../redux/actions';
 import { Icon } from 'react-native-elements';
 import {
   StyleSheet,
@@ -26,7 +26,31 @@ const ACCESS_TOKEN = 'access_token';
 const USER = 'user';
 
  const ProfileScreen = () => {
+  const dispatch = useDispatch();
   const { storedInfoCaseProfile } = useSelector(state => state.userReducer);
+  const { storedInfoMeets } = useSelector(state => state.userReducer);
+
+  useEffect (async () => {
+    try{
+      let info = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`,{
+        method: 'Get',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const userInfo = await info.json();
+      const meets = userInfo.user.meeting;
+      dispatch(setUsersMeets(meets));
+      // console.log(`Meets line 54: ${storedInfoMeets}`);
+      console.log(storedInfoMeets)
+  
+    }catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   // console.warn(storedInfoCaseProfile);
 
   //  let navParam = 'Did not set.';
@@ -83,7 +107,7 @@ const USER = 'user';
     // let userId = theUser.res.user.id;
 
       try{
-        let img = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/profilepic/${storedInfoCaseProfile}`,{
+        let img = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/profilepic/${storedInfoCaseProfile}`,{
           method: 'Get',
           headers: {
             'Accept': 'application/json',
@@ -111,10 +135,10 @@ const USER = 'user';
     runPic();
 
 if (hasPermission === null){
-  console.log('hasPermission is null.');
+  // console.log('hasPermission is null.');
 }
 if (hasPermission === false) {
-  console.log('hasPermission is false.');
+  // console.log('hasPermission is false.');
 }
 
 const cloudinaryUpload = async (photo) => {
@@ -134,7 +158,7 @@ const cloudinaryUpload = async (photo) => {
       let userId = theUser.res.user.id;
       // console.log(theUser.res.user.id);
       try{
-        fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`,{
+        fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`,{
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -191,14 +215,47 @@ const pickImage = async () => {
 }
 }
 
-  const GoToEditProfile = () => {
-    alert('Please be advised that every time that you access this this screen, you must re-fill and resubmit all of the required fields, or your profile info will be incorrect!!');
-    navigation.navigate('EditProfile');
+  const ActivateButton = async () => {
+    if (storedInfoMeets === 'no' || storedInfoMeets === null) {
+      dispatch(setUsersMeets('yes'));
+      console.log(`first: ${storedInfoMeets}`);
+    } else {
+      dispatch(setUsersMeets('no'));
+      console.log(`second: ${storedInfoMeets}`);
+    }
+
+    try{
+      const info = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`,{
+        method: 'Post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user: {
+            meeting: storedInfoMeets,
+          }
+        })
+      });
+
+      // let info2 = await info.json();
+
+      // setUserName(info2.user.username);
+      // setUserEmail(info2.user.email);
+      // setUserPhoneNumber(info2.user.phone_number);
+      // setUserAddress(info2.user.address);
+
+      // console.log(info2.user.username);
+
+    }catch (error) {
+      console.log(error);
+    }
+    // navigation.navigate('EditProfile');
   }
 
   const setInfo = async () => {
     try{
-      const info = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`,{
+      const info = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`,{
         method: 'Get',
         headers: {
           'Accept': 'application/json',
@@ -213,7 +270,7 @@ const pickImage = async () => {
       setUserPhoneNumber(info2.user.phone_number);
       setUserAddress(info2.user.address);
 
-      console.log(info2.user.username);
+      // console.log(info2.user.username);
 
     }catch (error) {
       console.log(error);
@@ -235,7 +292,7 @@ const pickImage = async () => {
                 }}
               style={styles.profilePic}>
             </Image>
-            <View style={{marginTop:-30, marginRight: -120}}>
+            {/* <View style={{marginTop:-30, marginRight: -120}}>
             <TouchableOpacity
             style={styles.button}
             onPress={async () => {
@@ -250,7 +307,7 @@ const pickImage = async () => {
               >
                   <Ionicons name='camera' color='#3B71F3' size={50}/>
               </TouchableOpacity>
-              </View>
+              </View> */}
           </ImageBackground>
         </View>
 
@@ -285,10 +342,19 @@ const pickImage = async () => {
           </View>
 
         <View style={{alignItems: 'center', justifyContent: 'center', marginTop: '30%'}}>
-          <Text> This is the Profile Modal </Text>
+
+          {storedInfoMeets === 'no' || storedInfoMeets === null ? <CustomButton
+            text="Enable Client's Meeting Button"
+            onPress={ActivateButton}
+          />
+          : <CustomButton
+          text="Disable Client's Meeting Button"
+          onPress={ActivateButton}
+        />}
+
           <CustomButton
-            text='Edit Profile'
-            onPress={GoToEditProfile}
+            text='Go TO Meeting with client'
+            // onPress={}
           />
         </View>
       </View>

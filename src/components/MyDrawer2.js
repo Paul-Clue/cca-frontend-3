@@ -43,7 +43,7 @@ function MyDrawer2 ({progress,...props}){
     setUserEmail(theUser.res.user.email);
     
       try{
-        let img = await fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
+        let img = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
           method: 'Get',
           headers: {
             'Accept': 'application/json',
@@ -62,6 +62,7 @@ function MyDrawer2 ({progress,...props}){
         const pic1 = await img.json();
         const pic2 = pic1.user;
        setProfilePic(pic2);
+
     
       }catch (error) {
         console.log(error);
@@ -94,7 +95,7 @@ const cloudinaryUpload = async (photo) => {
       let userId = theUser.res.user.id;
       console.log(theUser.res.user.id);
       try{
-        fetch (`https://5254-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+        fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -173,15 +174,15 @@ const pickImage = async () => {
           <View style={styles.drawerHeader}>
           <TouchableOpacity
             style={styles.button}
-            onPress={async () => {
-               await pickImage();
-              // console.log(response);
-              // if (response?.imageData) {
-              //   setImage(response.uri);
-              //   console.warn(image);
-              //   setImageData(response?.imageData);
-              // }
-              }}
+            // onPress={async () => {
+            //    await pickImage();
+            //   // console.log(response);
+            //   // if (response?.imageData) {
+            //   //   setImage(response.uri);
+            //   //   console.warn(image);
+            //   //   setImageData(response?.imageData);
+            //   // }
+            //   }}
               >
             <View style={styles.profPic}>
             <ImageBackground
@@ -215,11 +216,11 @@ const pickImage = async () => {
         
         <DrawerItemList {...props}/>
         
-        <DrawerItem
+        {/* <DrawerItem
         label= 'Rate Us'
         icon={({color, size}) => <Icon name='park' color='navy'/>}
         onPress={() => props.navigation.navigate('ConfirmEmailScreen')}
-        />
+        /> */}
         {/* </Animated.View> */}
       </DrawerContentScrollView>
       <View style={{marginBottom: 30}}>
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     borderRadius: 8,
     borderBottomWidth: 2,
-    borderBottomColor: 'lightgray',
+    // borderBottomColor: 'lightgray',
     alignItems: 'center',
     justifyContent: 'center',
     // flexDirection: 'row',

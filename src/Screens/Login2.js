@@ -14,7 +14,7 @@ import ContentLoader from "react-native-easy-content-loader";
 import Loader from 'react-native-easy-content-loader';
 import Load from "react-native-loading-gif";
 import "react-native-url-polyfill/auto";
-import { setNamed, setPhoneNumbers, setAddresss, setRelease } from '../redux/actions';
+import { setNamed, setPhoneNumbers, setAddresss, setRelease, setCaseProfile } from '../redux/actions';
 
 import {
   StyleSheet,
@@ -113,14 +113,30 @@ const Login2 = () => {
   const checkForToken = async () => {
     try {
       let token = await AsyncStorage.getItem(ACCESS_TOKEN);
+      let checkUser = await AsyncStorage.getItem(USER);
+      let checkUser2 = JSON.parse(checkUser);
+      // console.log(checkUser2);
+      // console.log(JSON.stringify(checkUser2.res.user.user_type))
 
       if(!token){
-        console.log('');
-      }else{
-        navigation.navigate('HomeScreen');
-        // console.warn("This is the token:" + token);
+        console.log('No Token line 122');
       }
-    }
+      // else{
+      //   let theUserType = JSON.stringify(checkUser2.res.user.user_type);
+      //   console.log('Started Else');
+
+      //   if (theUserType === 'joe' || theUserType === 'ann') {
+      //     console.log('The If Ran This line 128 Should Go To CaseManagerScreen')
+      //     dispatch(setManager(theUserType));
+      //     navigation.navigate('CaseManagerScreen');
+      //     } 
+          else {
+              // navigation.navigate('HomeScreen');
+              navigation.navigate('HomeScreen');
+              // console.warn("This is the token:" + token);
+          }
+      }
+    // }
     catch(error) {
       console.log("Token collection error in getToken")
     }
@@ -149,15 +165,13 @@ const Login2 = () => {
   const onSignIn = async () => {
     if (email.trim() === '') {
       setEmailError( 'An email is required.');
-      console.log(emailError);
     }if (password.trim() === '') {
       setPasswordError( 'A Password is required.');
-      console.log(passwordError);
     }else{
       setEmailError( '');
       setPasswordError( '');
       try{
-        let response = await fetch('https://5254-72-252-198-169.ngrok.io/api/v1/login', {
+        let response = await fetch('https://c06d-72-252-198-169.ngrok.io/api/v1/login', {
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -176,14 +190,14 @@ const Login2 = () => {
 
         if(response.status >= 200 && response.status < 300) {
           setErr('');
-          console.warn(res);
+          // console.warn(res);
           let accessToken = res.jwt;
           let theUser = JSON.stringify({res});
           storeToken(accessToken);
           storeUser(theUser);
           setEmail('');
           setPassword('');
-          navigation.navigate('Home');
+          navigation.navigate('HomeScreen');
           // console.warn(response);
 
             let user = await AsyncStorage.getItem(USER);
@@ -192,11 +206,15 @@ const Login2 = () => {
             let theUserPhone = theUser2.res.user.phone_number;
             let theUserAddress = theUser2.res.user.address;
             let theUserRelease = theUser2.res.user.release_date;
+            let theUserId = theUser2.res.user.id;
+            // let theManager = theUser2.res.user.user_type
 
             dispatch(setNamed(theUserName));
             dispatch(setPhoneNumbers(theUserPhone));
             dispatch(setAddresss(theUserAddress));
             dispatch(setRelease(theUserRelease));
+            dispatch(setCaseProfile(theUserId));
+
         }else{
           // errors = res.;
           removeToken();
