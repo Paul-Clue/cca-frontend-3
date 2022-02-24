@@ -18,8 +18,8 @@ import EditProfile from '../Screens/EditProfile';
 import ProfileScreen from '../Screens/ProfileScreen'
 import CaseManagerScreen from '../Screens/CaseManagerScreen';
 import CaseProfileScreen from '../Screens/CaseProfileScreen';
+import MilestoneScreen from '../Screens/MilestonesScreen'
 import Browser from '../Screens/Browser';
-import Browser2 from '../Screens/Browser2'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RotateInUpLeft } from 'react-native-reanimated';
 import { Provider } from 'react-redux';
@@ -108,6 +108,7 @@ function MyDrawer() {
               headerStyle: {
                 backgroundColor: '#3B71F3',
               },
+              headerShown: true,
             }}
           />
 
@@ -274,6 +275,27 @@ function MyTabs() {
             }}
           />
 
+<Tab.Screen
+            name="MilestoneScreen"
+            component={MilestoneScreen}
+            options={{
+              tabBarIcon: () => (
+                <Icon name='check' color='whitesmoke'/>
+              ),
+              headerStyle: {
+                backgroundColor: '#3B71F3',
+              },
+              headerTitleStyle: {
+                fontWeight: 'bold',
+                color: 'whitesmoke'
+              },
+              tabBarStyle: { backgroundColor: '#3B71F3' },
+              headerShown: true,
+              title: 'MilestoneScreen',
+
+            }}
+          />
+
 
           <Tab.Screen
           name="PostScreen"
@@ -350,7 +372,6 @@ const ScreensForStack = () =>{
       <Stack.Screen name={'ForgotPasswordScreen'} component={ForgotPasswordScreen} />
       <Stack.Screen name={'NewPasswordScreen'} component={NewPasswordScreen} />
       <Stack.Screen name={'Browser'} component={Browser} />
-      <Stack.Screen name={'Browser2'} component={Browser2} />
       <Stack.Screen name={'CaseManagerScreen'} component={CaseManagerScreen} />
       <Stack.Screen name={'CaseProfileScreen'} component={CaseProfileScreen} />
       <Stack.Screen name={'Login2'} component={Login2} options={{headerShown: false}} />

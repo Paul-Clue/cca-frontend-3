@@ -49,7 +49,7 @@ const USER = 'user';
 
   const runThis = async () => {
     try{
-      let info = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${id}`,{
+      let info = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${id}`,{
         method: 'Get',
         headers: {
           'Accept': 'application/json',
@@ -149,7 +149,7 @@ const USER = 'user';
       }
 
       try{
-        let users = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/users`,{
+        let users = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/users`,{
          method: 'Get',
          headers: {
            'Accept': 'application/json',
@@ -199,7 +199,7 @@ const USER = 'user';
         let userId = theUser.res.user.id;
         console.log(theUser.res.user.id);
         try{
-          fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+          fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
             method: 'Post',
             headers: {
               'Accept': 'application/json',

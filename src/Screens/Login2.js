@@ -171,7 +171,7 @@ const Login2 = () => {
       setEmailError( '');
       setPasswordError( '');
       try{
-        let response = await fetch('https://c06d-72-252-198-169.ngrok.io/api/v1/login', {
+        let response = await fetch('https://c67f-72-252-198-169.ngrok.io/api/v1/login', {
           method: 'Post',
           headers: {
             'Accept': 'application/json',

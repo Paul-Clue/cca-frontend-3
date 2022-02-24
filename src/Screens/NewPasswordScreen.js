@@ -43,7 +43,7 @@ const NewPasswordScreen = () => {
       console.warn('It went through.');
 
       try{
-        let response = await fetch('https://c06d-72-252-198-169.ngrok.io/api/v1/passchangeverify', {
+        let response = await fetch('https://c67f-72-252-198-169.ngrok.io/api/v1/passchangeverify', {
           // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
           method: 'Post',
           headers: {

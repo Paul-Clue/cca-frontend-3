@@ -65,6 +65,7 @@ const USER = 'user';
   let area = null;
   let manager = null;
   let employed = null;
+  let meeting_link = null;
 
   let employmentType = null;
 
@@ -126,7 +127,7 @@ const USER = 'user';
 
     // console.log(`This is the token: ${theUser.res.jwt}`)
       try{
-        let userProfile = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+        let userProfile = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -528,11 +529,13 @@ const USER = 'user';
               if (area === 'Upstate'){
                 // setManager('Ann');
                 manager ='Ann';
+                meeting_link = 'Fake Link';
                 console.log(`This is 423: ${manager}`)
               }
               if (area === 'City') {
                 // setManager('Joe');
                 manager ='Joe';
+                meeting_link = 'https://meet.google.com/hzp-mxmr-ytp';
                 console.log(`This is2: ${manager}`)
               }
               if (manager === null || area === null){
@@ -550,7 +553,7 @@ const USER = 'user';
 
                 // console.log(`This is the token: ${theUser.res.jwt}`)
                   try{
-                    let userProfile = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+                    let userProfile = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
                       method: 'Post',
                       headers: {
                         'Accept': 'application/json',
@@ -559,11 +562,11 @@ const USER = 'user';
                       body: JSON.stringify({
                         user:{
                           manager: manager,
-                          residence: area
+                          residence: area,
+                          meeting_link: meeting_link,
                         }
                     })
                     });
-                    console.log(`This is line 461: It Ran`)
 
                   }catch (error) {
                     console.log(error);
@@ -612,7 +615,7 @@ const USER = 'user';
                 console.warn(`509 this is manager ${employed}`)
 
                   try{
-                    let userProfile = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+                    let userProfile = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
                       method: 'Post',
                       headers: {
                         'Accept': 'application/json',

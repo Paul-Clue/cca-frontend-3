@@ -19,7 +19,8 @@ import {
   Image,
   TouchableOpacity,
   useWindowDimensions,
-  Button
+  Button,
+  Linking,
 } from 'react-native';
 
 const ACCESS_TOKEN = 'access_token';
@@ -42,6 +43,8 @@ const USER = 'user';
   const [userPhoneNumber, setUserPhoneNumber] = useState(null);
   const [userAddress, setUserAddress] = useState(null);
   const [id, setId] = useState(null);
+  const [meeting, setMeeting] = useState(null);
+  const [meetingLink, setMeetingLink] = useState(null);
 
   const navigation = useNavigation();
 
@@ -53,35 +56,39 @@ const USER = 'user';
    setUserPhoneNumber(theUser1.res.user.phone_number);
    setUserAddress(theUser1.res.user.address);
    setId(theUser1.res.user.id);
+   setMeeting(theUser1.res.user.meeting);
+   setMeetingLink(theUser1.res.user.meeting_link);
+   console.log(theUser1.res.user.meeting_link);
   };
   getUserInfo();
 
+  // const runThis = async () => {
+  //   try{
+  //     let info = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${id}`,{
+  //       method: 'Get',
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+
+  //     const userInfo = await info.json();
+  //     const meets = userInfo.user.meeting;
+  //     console.warn(meets);
+  //     dispatch(setUsersMeets(meets));
+  //     // console.log(`Meets line 54: ${storedInfoMeets}`);
+      
+  
+  //   }catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+
   useEffect (() => {
 
-    const runThis = async () => {
-      try{
-        let info = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${id}`,{
-          method: 'Get',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-        });
-  
-        const userInfo = await info.json();
-        const meets = userInfo.user.meeting;
-        console.warn(meets);
-        dispatch(setUsersMeets(meets));
-        // console.log(`Meets line 54: ${storedInfoMeets}`);
-        
-    
-      }catch (error) {
-        console.log(error);
-      }
-    };
-    runThis();
-
     (async () => {
+      // runThis();
       // const { status } = await Camera.requestCameraPermissionsAsync();
       // setHasPermission(status === 'granted');
       navigation.addListener('focus', () => {
@@ -106,7 +113,7 @@ const USER = 'user';
     let userId = theUser.res.user.id;
 
       try{
-        let img = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
+        let img = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
           method: 'Get',
           headers: {
             'Accept': 'application/json',
@@ -157,7 +164,7 @@ const cloudinaryUpload = async (photo) => {
       let userId = theUser.res.user.id;
       console.log(theUser.res.user.id);
       try{
-        fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+        fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -222,7 +229,7 @@ const pickImage = async () => {
 //  const ActivateButton = async () => {
 
 //     try{
-//       const info = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`,{
+//       const info = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`,{
 //         method: 'Get',
 //         headers: {
 //           'Accept': 'application/json',
@@ -276,13 +283,14 @@ const GoToCounselorMeeting = () => {
               </View>
           </ImageBackground>
         </View>
-        {storedInfoMeets === 'yes' ?
+        {meeting === 'yes' ?
         <View style={{alignItems: 'center', justifyContent: 'center', marginTop: '5%'}}>
           {/* <Text> This is the Profile Modal </Text> */}
 
           <CustomButton
             text='Go To Meeting With Your Counselor.'
-            onPress={GoToCounselorMeeting}
+            // onPress={GoToCounselorMeeting}
+            onPress={ ()=> Linking.openURL(meetingLink)}
           />
         </View>
         : null
