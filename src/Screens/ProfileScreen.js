@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { setUsersMeets } from '../redux/actions'
 import { Icon } from 'react-native-elements';
+import Ngrok from '../util/Ngrok';
 import {
   StyleSheet,
   Text,
@@ -62,29 +63,6 @@ const USER = 'user';
   };
   getUserInfo();
 
-  // const runThis = async () => {
-  //   try{
-  //     let info = await fetch (`https://c06d-72-252-198-169.ngrok.io/api/v1/user/${id}`,{
-  //       method: 'Get',
-  //       headers: {
-  //         'Accept': 'application/json',
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     const userInfo = await info.json();
-  //     const meets = userInfo.user.meeting;
-  //     console.warn(meets);
-  //     dispatch(setUsersMeets(meets));
-  //     // console.log(`Meets line 54: ${storedInfoMeets}`);
-      
-  
-  //   }catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-
   useEffect (() => {
 
     (async () => {
@@ -113,7 +91,7 @@ const USER = 'user';
     let userId = theUser.res.user.id;
 
       try{
-        let img = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
+        let img = await fetch (`${Ngrok}/profilepic/${userId}`,{
           method: 'Get',
           headers: {
             'Accept': 'application/json',
@@ -164,7 +142,7 @@ const cloudinaryUpload = async (photo) => {
       let userId = theUser.res.user.id;
       console.log(theUser.res.user.id);
       try{
-        fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+        fetch (`${Ngrok}/user/${userId}`,{
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -226,28 +204,6 @@ const pickImage = async () => {
     navigation.navigate('EditProfile');
   }
 
-//  const ActivateButton = async () => {
-
-//     try{
-//       const info = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`,{
-//         method: 'Get',
-//         headers: {
-//           'Accept': 'application/json',
-//           'Content-Type': 'application/json',
-//         },
-//       });
-
-//       let info2 = await info.json();
-//       let meet = info2.user.meeting
-
-//       console.log(meet);
-
-//     }catch (error) {
-//       console.log(error);
-//     }
-//     // navigation.navigate('EditProfile');
-//   }
-//   ActivateButton();
 const GoToCounselorMeeting = () => {
   // Linking.openURL('https://play.google.com/store/apps/details?id=com.google.android.apps.meetings&hl=en&gl=US');
   navigation.navigate('Browser2');

@@ -10,6 +10,8 @@ export const SET_MANAGER_LIST = 'SET_MANAGER_LIST';
 export const SET_CASE_PROFILE = 'SET_CASE_PROFILE';
 export const SET_MANAGER = 'SET_MANAGER';
 export const SET_MEETS = 'SET_MEETS';
+export const SET_MILESTONE_LIST = 'SET_MILESTONE_LIST';
+export const SET_MILESTONE_ID = "MILESTONE_ID";
 
 
 
@@ -97,6 +99,22 @@ export const setUsersMeets = storedInfoMeets => dispatch => {
   dispatch({
     type: SET_MEETS,
     payload: storedInfoMeets,
+
+  });
+};
+
+export const setMilestoneList = storedInfoMileStoneList => dispatch => {
+  dispatch({
+    type: SET_MILESTONE_LIST,
+    payload: storedInfoMileStoneList,
+
+  });
+};
+
+export const setMilestoneId = storedInfoMilestoneId => dispatch => {
+  dispatch({
+    type: SET_MILESTONE_ID,
+    payload: storedInfoMilestoneId,
 
   });
 };

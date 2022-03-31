@@ -10,6 +10,8 @@ import {
   SET_CASE_PROFILE,
   SET_MANAGER,
   SET_MEETS,
+  SET_MILESTONE_LIST,
+  SET_MILESTONE_ID
 } from './actions';
 
 const initialState = {
@@ -24,6 +26,8 @@ const initialState = {
   storedInfoCaseProfile: '',
   storedInfoManager: '',
   storedInfoMeets: '',
+  storedInfoMileStoneList: '',
+  storedInfoMilestoneId: '',
   //create an initial state for the other variable.
 }
 
@@ -49,8 +53,12 @@ function userReducer(state = initialState, action){
         return {...state, storedInfoCaseProfile: action.payload};
     case SET_MANAGER:
         return {...state, storedInfoManager: action.payload};
-        case SET_MEETS:
-    return {...state, storedInfoMeets: action.payload};
+    case SET_MEETS:
+        return {...state, storedInfoMeets: action.payload};
+    case SET_MILESTONE_LIST:
+        return {...state, storedInfoMileStoneList: action.payload};
+    case SET_MILESTONE_ID:
+        return {...state, storedInfoMilestoneId: action.payload};
       //Create another case for another variable if necessary.
       default:
         return state;

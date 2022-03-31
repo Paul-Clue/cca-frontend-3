@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AppLoading from 'expo-app-loading';
 import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
 import { StatusBar } from 'expo-status-bar';
+import Ngrok from '../util/Ngrok';
 import {
   StyleSheet,
   Text,
@@ -37,7 +38,7 @@ const ConfirmEmailScreen = () => {
       setCodeError('');
 
       try{
-        let response = await fetch('https://c67f-72-252-198-169.ngrok.io/api/v1/email_code', {
+        let response = await fetch(`${Ngrok}/email_code`, {
           // let response = await fetch('https://secure-mountain-84366.herokuapp.com/appoints', {
           method: 'Post',
           headers: {

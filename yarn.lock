@@ -1330,6 +1330,11 @@
   dependencies:
     "merge-options" "^3.0.4"
 
+"@react-native-community/checkbox@^0.5.12":
+  "integrity" "sha512-Dd3eiAW7AkpRgndwKGdgQ6nNgEmZlVD8+KAOBqwjuZQ/M67BThXJ9Ni+ydpPjNm4e28KXmIILfkvhcDt0ZoFTQ=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/checkbox/-/checkbox-0.5.12.tgz"
+  "version" "0.5.12"
+
 "@react-native-community/cli-debugger-ui@^5.0.1":
   "integrity" "sha512-5gGKaaXYOVE423BUqxIfvfAVSj5Cg1cU/TpGbeg/iqpy2CfqyWqJB3tTuVUbOOiOvR5wbU8tti6pIi1pchJ+oA=="
   "resolved" "https://registry.npmjs.org/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-5.0.1.tgz"
@@ -2904,6 +2909,11 @@
     "@expo/config-plugins" "^4.0.2"
     "@koale/useworker" "^4.0.2"
     "invariant" "^2.2.4"
+
+"expo-checkbox@^2.0.0":
+  "integrity" "sha512-ZvDdpHRyyTd6P4JnqqJKyLzg8iKrvhHSXOKBK2uc/Xq5MWBj1JNtn2FCGs0oNpG9H1rt8/gV86Wzy96onxE7bw=="
+  "resolved" "https://registry.npmjs.org/expo-checkbox/-/expo-checkbox-2.0.0.tgz"
+  "version" "2.0.0"
 
 "expo-constants@~13.0.0":
   "integrity" "sha512-DwElzs1k6KljlZln/X2O9b5K4bXlDk8nzF5nzSLgI+Ibg/xUoIL5QKM41Y9RDJfTzlDlV7nmeS/Xar+nP5KjMA=="
@@ -5445,7 +5455,7 @@
   dependencies:
     "events" "^3.2.0"
 
-"react-native@*", "react-native@^0.0.0-0 || ^0.60.6 || ^0.61.5 || ^0.62.2 || ^0.63.2 || ^0.64.0 || ^0.65.0 || ^0.66.0 || 1000.0.0", "react-native@>=0.38.0", "react-native@>=0.42.0", "react-native@>=0.43.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.56.0", "react-native@>=0.57", "react-native@>=0.60", "react-native@>=0.64.0-rc.0 || 0.0.0-*", "react-native@0.64.3":
+"react-native@*", "react-native@^0.0.0-0 || ^0.60.6 || ^0.61.5 || ^0.62.2 || ^0.63.2 || ^0.64.0 || ^0.65.0 || ^0.66.0 || 1000.0.0", "react-native@>= 0.62", "react-native@>=0.38.0", "react-native@>=0.42.0", "react-native@>=0.43.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.56.0", "react-native@>=0.57", "react-native@>=0.60", "react-native@>=0.64.0-rc.0 || 0.0.0-*", "react-native@0.64.3":
   "integrity" "sha512-2OEU74U0Ek1/WeBzPbg6XDsCfjF/9fhrNX/5TFgEiBKd5mNc9LOZ/OlMmkb7iues/ZZ/oc51SbEfLRQdcW0fVw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.64.3.tgz"
   "version" "0.64.3"

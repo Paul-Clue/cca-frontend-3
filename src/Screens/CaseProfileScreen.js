@@ -7,8 +7,11 @@ import * as ImagePicker from 'expo-image-picker';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import { setUsersMeets } from '../redux/actions';
+import { setUsersMeets, setMilestoneId } from '../redux/actions';
 import { Icon } from 'react-native-elements';
+import Ngrok from '../util/Ngrok';
+// import CheckBox from '@react-native-community/checkbox'
+import CheckBox from 'expo-checkbox';
 import {
   StyleSheet,
   Text,
@@ -21,19 +24,44 @@ import {
   useWindowDimensions,
   Button,
   Linking,
+  TextInput,
 } from 'react-native';
 
 const ACCESS_TOKEN = 'access_token';
 const USER = 'user';
 
 const ProfileScreen = () => {
+  const { storedInfoMilestoneId } = useSelector(state => state.userReducer);
+
+  const [isSelected, setSelection] = useState(false);
+  const { storedInfoMileStoneList } = useSelector(state => state.userReducer);
+  let milestoneList2 = [];
+  const [milestoneTitle, setMilestoneTitle] = useState(null);
+  const [milestoneInstructions, setMilestoneInstructions] = useState(null);
+  const [mTitleError, setMTitleError] = useState(null);
+  const [mInstructionsError, setMInstructionsError] = useState(null);
+  const [milestoneList, setMilestoneList] = useState(null);
+  const [err, setErr] = useState('');
+  let errors = '';
+
+  const [userId, setUserId] = useState(null);
+
   const dispatch = useDispatch();
   const { storedInfoCaseProfile } = useSelector(state => state.userReducer);
   const { storedInfoMeets } = useSelector(state => state.userReducer);
 
+  const configMilestones = () => {
+    for(let i = 0; i < storedInfoMileStoneList.length; i += 1) {
+      milestoneList2.push(storedInfoMileStoneList[i]);
+    }
+  }
+
+  configMilestones();
+
   useEffect(async () => {
     try {
-      let info = await fetch(`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`, {
+      // let info = await fetch(`https://7b55-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`, {
+        let info = await fetch(`${Ngrok}/user/${storedInfoCaseProfile}`, {
         method: 'Get',
         headers: {
           'Accept': 'application/json',
@@ -42,25 +70,65 @@ const ProfileScreen = () => {
       });
 
       const userInfo = await info.json();
+      // userId = userInfo.user.id;
+      setUserId(userInfo.user.id)
       const meets = userInfo.user.meeting;
       dispatch(setUsersMeets(meets));
       // console.log(`Meets line 54: ${storedInfoMeets}`);
-      console.log(storedInfoMeets)
+      console.log(userId)
 
     } catch (error) {
       console.log(error);
     }
   }, []);
 
-  // console.warn(storedInfoCaseProfile);
+  const createMilestone = async () => {
+    if (milestoneTitle.trim() === '') {
+      setMTitleError( 'A title is required.');
+    }if (milestoneInstructions.trim() === '') {
+      setMInstructionsError( 'Some form of instructions are required.');
+    }else{
+      setMTitleError( '');
+      setMInstructionsError( '');
+      try{
+        let response = await fetch(`${Ngrok}/milestone`, {
+          method: 'Post',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            // 'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+              // username: 'pc@gmail.com' ,
+              title: milestoneTitle.trim(),
+              instructions: milestoneInstructions.trim(),
+              user_id: userId,
+              // confirmPassword: confirmPassword
+          })
+        });
+        // console.warn(response.text())
+        let res = await response.json();
 
-  //  let navParam = 'Did not set.';
-  //  const setNavigationParam = () => {
-  //   const { navigation } = props;
-  //   navParam = JSON.stringify(navigation.getParam('userId', 'NO-ID'))
-  //  };
+        if(response.status >= 200 && response.status < 300) {
+          setErr('');
+          // console.warn(response);
 
-  //  setNavigationParam();
+        }else{
+          for (let i = 10; i < res.length-2; i += 1) {
+            errors += res.charAt(i);
+          }
+          setErr(errors);
+
+          // console.warn(errors)
+          throw errors;
+        }
+      }
+
+      catch (errors) {
+        console.log('errors caught: ' + errors);
+      }
+    }
+  };
 
   const [profilePic, setProfilePic] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
@@ -71,17 +139,6 @@ const ProfileScreen = () => {
   const [meetingLink, setMeetingLink] = useState(null);
 
   const navigation = useNavigation();
-  // console.warn(navParam);
-
-  // const getUserInfo = async () => {
-  // const user1 = await AsyncStorage.getItem(USER);
-  // const theUser1 = JSON.parse(user1);
-  //  setUserName(theUser1.res.user.username);
-  //  setUserEmail(theUser1.res.user.email);
-  //  setUserPhoneNumber(theUser1.res.user.phone_number);
-  //  setUserAddress(theUser1.res.user.address);
-  // };
-  // getUserInfo();
 
   useEffect(() => {
     (async () => {
@@ -104,26 +161,14 @@ const ProfileScreen = () => {
   }, [navigation]);
 
   const runPic = async () => {
-    // let user = await AsyncStorage.getItem(USER);
-    // let theUser = JSON.parse(user);
-    // let userId = theUser.res.user.id;
-
     try {
-      let img = await fetch(`https://c67f-72-252-198-169.ngrok.io/api/v1/profilepic/${storedInfoCaseProfile}`, {
+      let img = await fetch(`${Ngrok}/profilepic/${storedInfoCaseProfile}`, {
         method: 'Get',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
       });
-      // .then(res => res.json())
-      // .then(data => {
-      //   let pic1 = JSON.stringify(data.user);
-      //   setProfilePic(pic1);
-      //   // console.log(`This is the Rails image return data: ${profilePic}`);
-      //   // console.log('It ran');
-
-      // });
 
       const pic1 = await img.json();
       const pic2 = pic1.user;
@@ -160,7 +205,7 @@ const ProfileScreen = () => {
       let userId = theUser.res.user.id;
       // console.log(theUser.res.user.id);
       try {
-        fetch(`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`, {
+        fetch(`${Ngrok}/user/${storedInfoCaseProfile}`, {
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -227,7 +272,7 @@ const ProfileScreen = () => {
     }
 
     try {
-      const info = await fetch(`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`, {
+      const info = await fetch(`${Ngrok}/user/${storedInfoCaseProfile}`, {
         method: 'Post',
         headers: {
           'Accept': 'application/json',
@@ -240,15 +285,6 @@ const ProfileScreen = () => {
         })
       });
 
-      // let info2 = await info.json();
-
-      // setUserName(info2.user.username);
-      // setUserEmail(info2.user.email);
-      // setUserPhoneNumber(info2.user.phone_number);
-      // setUserAddress(info2.user.address);
-
-      // console.log(info2.user.username);
-
     } catch (error) {
       console.log(error);
     }
@@ -257,7 +293,7 @@ const ProfileScreen = () => {
 
   const setInfo = async () => {
     try {
-      const info = await fetch(`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${storedInfoCaseProfile}`, {
+      const info = await fetch(`${Ngrok}/user/${storedInfoCaseProfile}`, {
         method: 'Get',
         headers: {
           'Accept': 'application/json',
@@ -295,22 +331,6 @@ const ProfileScreen = () => {
               }}
               style={styles.profilePic}>
             </Image>
-            {/* <View style={{marginTop:-30, marginRight: -120}}>
-            <TouchableOpacity
-            style={styles.button}
-            onPress={async () => {
-               await pickImage();
-              // console.log(response);
-              // if (response?.imageData) {
-              //   setImage(response.uri);
-              //   console.warn(image);
-              //   setImageData(response?.imageData);
-              // }
-              }}
-              >
-                  <Ionicons name='camera' color='#3B71F3' size={50}/>
-              </TouchableOpacity>
-              </View> */}
           </ImageBackground>
         </View>
 
@@ -361,7 +381,65 @@ const ProfileScreen = () => {
             onPress={() => Linking.openURL(meetingLink)}
           />
         </View>
+
         <View style={{ marginTop: '15%', width: '100%', alignItems: 'center' }}>
+
+          <Text
+              style={{
+                color: 'whitesmoke',
+                fontSize: 20,
+                fontWeight: 'bold',
+              }}
+            >
+              Client's Milestones:
+            </Text>
+            {milestoneList2.map((item) => {
+              return  <TouchableOpacity
+                        style={{
+                          color: 'whitesmoke',
+                          fontSize: 25,
+                          fontWeight: 'bold',
+                          borderColor: 'fray',
+                          borderWidth: 1,
+                          borderRadius: 5,
+                          marginBottom: 5,
+                          backgroundColor: 'sandybrown',
+                          padding: 5,
+                        }}
+                        key={item.id}
+                        onPress={async () => {
+                          // dispatch(setCaseProfile(user.id));
+              
+                            // navigation.navigate('MilestoneScreen');
+                            console.log('Something');
+                        }}
+                        
+                      >
+                        {/* <CheckBox
+                          value={isSelected}
+                          onValueChange={setSelection}
+                          style={{marginRight: 20,}}
+                        /> */}
+                          <Text
+                            style={{marginLeft: 20, fontSize: 20,}}
+                            >
+                              {`Milestone: ${item.title}\n\n`}
+                              {`Instructions:\n${item.instructions}`}
+                          </Text>
+                      </TouchableOpacity>
+            })}
+          <View>
+            <Text
+              style={{
+                color: 'whitesmoke',
+                fontSize: 15,
+                fontWeight: 'bold',
+              }}
+            >
+            {/* {Do MIlestone list map now} */}
+            </Text>
+          </View>
+
           <Text
             style={{
               color: 'whitesmoke',
@@ -378,24 +456,47 @@ const ProfileScreen = () => {
                 color: 'whitesmoke',
                 fontSize: 15,
                 fontWeight: 'bold',
-                marginRight: '30%'
+                marginRight: '50%'
               }}
             >
               Milestone Title
             </Text>
-            <FieldInput placeholder='Milestone Title' icon='title' />
+            <FieldInput placeholder='Milestone Title' icon='title' value={milestoneTitle} setValue={setMilestoneTitle} />
+            {!!mTitleError && (
+              <Text style={{color: 'red'}}>
+                {mTitleError}
+              </Text>
+            )}
 
             <Text
               style={{
                 color: 'whitesmoke',
                 fontSize: 15,
                 fontWeight: 'bold',
-                marginRight: '30%'
+                marginRight: '55%'
               }}
             >
-              How to complete Milestone
+              Instructions
             </Text>
-            <FieldInput placeholder='Milestone Title' icon='title' />
+            {/* <FieldInput placeholder='Milestone Title' icon='title' /> */}
+            <TextInput
+            style={{backgroundColor: 'whitesmoke', width: '80%', borderRadius: 5, padding: 10}}
+            multiline = {true}
+            numberOfLines = {15}
+            onChangeText={(value) => setMilestoneInstructions(value)}
+            />
+
+            {!!mInstructionsError && (
+              <Text style={{color: 'red'}}>
+                {mInstructionsError}
+              </Text>
+            )}
+
+            <CustomButton
+            text='Done'
+            // onPress={}
+            onPress={createMilestone}
+          />
           </View>
         </View>
       </View>

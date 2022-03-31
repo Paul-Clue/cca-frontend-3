@@ -14,6 +14,7 @@ import ContentLoader from "react-native-easy-content-loader";
 import Loader from 'react-native-easy-content-loader';
 import Load from "react-native-loading-gif";
 import "react-native-url-polyfill/auto";
+import Ngrok from '../util/Ngrok';
 import { setNamed, setPhoneNumbers, setAddresss, setRelease, setCaseProfile } from '../redux/actions';
 
 import {
@@ -115,26 +116,13 @@ const Login2 = () => {
       let token = await AsyncStorage.getItem(ACCESS_TOKEN);
       let checkUser = await AsyncStorage.getItem(USER);
       let checkUser2 = JSON.parse(checkUser);
-      // console.log(checkUser2);
-      // console.log(JSON.stringify(checkUser2.res.user.user_type))
 
       if(!token){
         console.log('No Token line 122');
       }
-      // else{
-      //   let theUserType = JSON.stringify(checkUser2.res.user.user_type);
-      //   console.log('Started Else');
-
-      //   if (theUserType === 'joe' || theUserType === 'ann') {
-      //     console.log('The If Ran This line 128 Should Go To CaseManagerScreen')
-      //     dispatch(setManager(theUserType));
-      //     navigation.navigate('CaseManagerScreen');
-      //     } 
-          else {
-              // navigation.navigate('HomeScreen');
-              navigation.navigate('HomeScreen');
-              // console.warn("This is the token:" + token);
-          }
+        else {
+            navigation.navigate('HomeScreen');
+        }
       }
     // }
     catch(error) {
@@ -171,7 +159,7 @@ const Login2 = () => {
       setEmailError( '');
       setPasswordError( '');
       try{
-        let response = await fetch('https://c67f-72-252-198-169.ngrok.io/api/v1/login', {
+        let response = await fetch(`${Ngrok}/login`, {
           method: 'Post',
           headers: {
             'Accept': 'application/json',

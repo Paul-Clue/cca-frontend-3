@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from 'react-redux';
-import { setManagerList, setCaseProfile } from '../redux/actions';
+import { setManagerList, setCaseProfile, setMilestoneList } from '../redux/actions';
+import Ngrok from '../util/Ngrok';
 import {
   StyleSheet,
   Text,
@@ -23,43 +24,6 @@ import {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  // let users = '';
-  // const [user2, setUser] = useState('something');
-
-  // const runPic = async () => {
-  //   // let user = await AsyncStorage.getItem(USER);
-  //   // let theUser = JSON.parse(user);
-  //   // let userId = theUser.res.user.id;
-
-  //     try{
-  //        users = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/users`,{
-  //         method: 'Get',
-  //         headers: {
-  //           'Accept': 'application/json',
-  //           'Content-Type': 'application/json',
-  //         },
-  //       });
-
-  //     let users1 = await users.json();
-  //     let arr = users1;
-     
-
-  //     // setUser(users1);
-  //     return arr;
-
-  //     }catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   const giveValue = async () => {
-  //     return await runPic().then(res => res);
-  //   }
-
-  //   setUser(giveValue());
-    // console.log(storedInfoManagerList.length)
-    // MAKE A NEW ARRAY.
-    // THEN PUT ALL OF THE CONTENTS FROM storageInfoManagerList into that array
-    // THEN MAP OUT THE CONTENTS OF THE ARRAY INTO THE VIEW
     const renderManagerList = () => {
       let ListArray = [];
      for (let i =0; i<= storedInfoManagerList.length; i += 1) {
@@ -79,8 +43,28 @@ import {
           <TouchableOpacity
           style={{width: '95%',}}
           key={user.id}
-          onPress={() => {
+          onPress={async () => {
             dispatch(setCaseProfile(user.id));
+
+            try {
+              let img = await fetch(`${Ngrok}/milestone/${user.id}`, {
+                method: 'Get',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                },
+              });
+                // CONSOLE.LOG THE RESPONSE TO SEE HOW IT COMES BACK AND FORMAT MILESTONES PROPERLY.
+        
+              const userMilestones = await img.json();
+              const userMilestones2 = userMilestones;
+
+              dispatch(setMilestoneList(userMilestones2));
+
+            } catch (error) {
+              console.log(error);
+            }
+
               navigation.navigate('CaseProfileScreen');
           }}
           >
@@ -108,7 +92,6 @@ import {
                 }}
                 >
                 <ImageBackground style={{width: 40, height: 40, flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                {console.log(`line 81 `)}
                   <Image
                     source={{
                       uri: user.img

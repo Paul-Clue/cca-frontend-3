@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import CustomButton from "../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Ngrok from '../util/Ngrok';
 // import { Ionicons, FontAwesome } from "@expo/vector-icons";
 // import { Icon } from 'react-native-elements';
 // import FieldInput from '../components/FieldInput';
@@ -49,7 +50,7 @@ const USER = 'user';
 
   const runThis = async () => {
     try{
-      let info = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${id}`,{
+      let info = await fetch (`${Ngrok}/user/${id}`,{
         method: 'Get',
         headers: {
           'Accept': 'application/json',
@@ -149,7 +150,7 @@ const USER = 'user';
       }
 
       try{
-        let users = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/users`,{
+        let users = await fetch (`${Ngrok}/users`,{
          method: 'Get',
          headers: {
            'Accept': 'application/json',
@@ -199,7 +200,7 @@ const USER = 'user';
         let userId = theUser.res.user.id;
         console.log(theUser.res.user.id);
         try{
-          fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+          fetch (`${Ngrok}/user/${userId}`,{
             method: 'Post',
             headers: {
               'Accept': 'application/json',

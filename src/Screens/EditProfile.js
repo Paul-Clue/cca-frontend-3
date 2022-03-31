@@ -17,6 +17,7 @@ import {
   Button,
   unstable_batchedUpdates
 } from 'react-native';
+import Ngrok from '../util/Ngrok';
 import CustomButton from "../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from 'react-redux';
@@ -47,21 +48,6 @@ const USER = 'user';
   //  const { name } = useSelector(state => state.userReducer);
    const dispatch = useDispatch();
 
-    // const assignVariables = async () => {
-    //   let user = await AsyncStorage.getItem(USER);
-    //   let theUser = JSON.parse(user);
-    //   let nameOfUser = theUser.res.user.username;
-    //   let theUserName = theUser.res.user.username;
-    //   setName(theUserName);
-    // }
-    // assignVariables();
-
-  // const nam = useRef();
-  // const handleOnChange = () => {
-  //   setName(
-  //     nam.current.value,
-  //   );
-  // }
   let area = null;
   let manager = null;
   let employed = null;
@@ -73,18 +59,8 @@ const USER = 'user';
   // const [phoneNumber1, setPhoneNumber1] = useState(null);
   // const [address1, setAddress1] = useState(null);
 
-    const [area1, setArea1] = useState(null);// --DONE--
-    const [employed1, setEmployed1] = useState(null);// --DONE--
-    // const [employmentHours, setEmploymentHours] = useState(null);// --DONE--
-    // const [employmentType1, setEmploymentType1] = useState(null);// --DONE--
-    // const [manager, setManager] = useState(null);// --DONE--
-    // const [name, setName] = useState(null);// --DONE--
-    // const [phoneNumber, setPhoneNumber] = useState(null);// --DONE--
-    // const [address, setAddress] = useState('');// --DONE--
-    // const [email, setEmail] = useState('');
-
-  // const [date, setDate] = useState(new Date())
-  // const [open, setOpen] = useState(false)
+  const [area1, setArea1] = useState(null);// --DONE--
+  const [employed1, setEmployed1] = useState(null);// --DONE--
 
   const [date, setDate] = useState(new Date());// --DONE--
   const [mode, setMode] = useState('date');
@@ -127,7 +103,7 @@ const USER = 'user';
 
     // console.log(`This is the token: ${theUser.res.jwt}`)
       try{
-        let userProfile = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+        let userProfile = await fetch (`${Ngrok}/user/${userId}`,{
           method: 'Post',
           headers: {
             'Accept': 'application/json',
@@ -149,20 +125,7 @@ const USER = 'user';
             }
         })
         });
-        // console.log(`This is line 120: ${name}`)
-        // .then(res => res.json())
-        // .then(data => {
-        //   let pic1 = JSON.stringify(data.user);
-        //   setProfilePic(pic1);
-        //   // console.log(`This is the Rails image return data: ${profilePic}`);
-        //   // console.log('It ran');
-    
-        // });
-        
-      //   const pic1 = await img.json();
-      //   const pic2 = pic1.user;
-      //  setProfilePic(pic2);
-      // navigation.navigate('Profile');
+
       const savedPerson={
         res:{
         user: {
@@ -222,113 +185,6 @@ const USER = 'user';
     showMode('time');
   };
 
-  // const test = () => {
-  //   if(employed === true){
-  //     return (
-  //       <View>
-  //         <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 70}}>
-  //           <Text
-  //             style={{
-  //               color: 'whitesmoke',
-  //               marginTop: 30,
-  //               fontSize: 17
-  //             }}
-  //           >
-  //             What Industry?
-  //           </Text>
-  //           <Picker
-  //             selectedValue={storedInfoEmpType}
-  //             onValueChange={(value) => {
-  //               dispatch(setEmpType(value));
-  //             }}
-  //             mode="dropdown"
-  //             style={styles.picker}
-  //           >
-  //           <Picker.Item label="Choose" value={null} />
-  //           <Picker.Item label="Construction" value=" Construction" />
-  //           <Picker.Item label="Health Care" value="Health Care" />
-  //           <Picker.Item label="Education" value="Education" />
-  //           <Picker.Item label="Technology" value="Technology" />
-  //           <Picker.Item label="Automobile" value="Automobile" />
-  //           <Picker.Item label="Manufacturing" value="Manufacturing" />
-  //           <Picker.Item label="Customer Service" value="Customer Service" />
-  //           <Picker.Item label="Security" value="Security" />
-  //           <Picker.Item label="Law" value="Law" />
-  //           <Picker.Item label="Public Advocacy" value="Public Advocacy" />
-  //         </Picker>
-  //       </View>
-
-  //       <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 70}}>
-  //         <Text
-  //           style={{
-  //             color: 'whitesmoke',
-  //             marginTop: 30,
-  //             fontSize: 17
-  //           }}
-  //         >
-  //           What are your hours?
-  //         </Text>
-  //       <Picker
-  //         selectedValue={storedInfoWorkHours}
-  //         onValueChange={(value) => {
-  //           dispatch(setWorkHours(value));
-  //           // setEmploymentHours(value);
-  //         }}
-  //         mode="dropdown"
-  //         style={styles.picker}
-  //       >
-  //       <Picker.Item label="Choose" value={null} />
-  //       <Picker.Item label="Part Time" value="Part Time" />
-  //       <Picker.Item label="Full Time" value="Full Time" />
-  //       </Picker>
-  //       </View>
-
-
-  //       <View>
-  //         <View style={{marginTop: 20, alignItems: 'center', justifyContent: 'center'}}>
-  //           <Text
-  //             style={{
-  //               color: 'whitesmoke',
-  //               marginTop: 30,
-  //               fontSize: 17
-  //             }}
-  //           >
-  //             Please pick the date you were employed
-  //           </Text>
-  //           <CustomButton onPress={showDatepicker2} text='Release Date'/>
-  //         </View>
-
-  //         {show2 && (
-  //           <DateTimePicker
-  //             testID="dateTimePicker"
-  //             value={date}
-  //             mode={mode2}
-  //             is24Hour={true}
-  //             display="default"
-  //             onChange={onChange2}
-  //           />
-  //         )}
-  //         <View style={{alignItems: 'center', justifyContent: 'center'}}>
-  //           <Text
-  //             style={{
-  //               color: 'goldenrod',
-  //               marginTop: 30,
-  //               fontSize: 17
-  //             }}
-  //           >
-  //               Submit Profile Information
-  //             </Text>
-  //           <CustomButton onPress={updateProfile} text='Submit'/>
-  //           </View>
-  //         </View>
-  //     </View>
-  //   )
-  //   }else{
-  //     return null
-  //   }
-
-  // }
-
   const submitButton = () => {
     if (employed !== 'Yes') {
       return(
@@ -353,18 +209,6 @@ const USER = 'user';
       )
     }
   }
-
-  // const TextFieldComponents = () => {
-  //   return (
-  //     // <ScrollView style={{marginTop: '0%', backgroundColor: 'black'}}>
-
-  //     // </ScrollView>
-  //   )
-  // }
-
-
-
-
 
   return (
     <ScrollView style={{marginTop: '0%', backgroundColor: 'black'}}>
@@ -553,7 +397,7 @@ const USER = 'user';
 
                 // console.log(`This is the token: ${theUser.res.jwt}`)
                   try{
-                    let userProfile = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
+                    let userProfile = await fetch (`${Ngrok}/user/${userId}`,{
                       method: 'Post',
                       headers: {
                         'Accept': 'application/json',
@@ -591,65 +435,9 @@ const USER = 'user';
   
         </View>
   
-        <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 70}}>
-        {/* <Text
-            style={{
-              color: 'whitesmoke',
-              marginTop: 30,
-              fontSize: 17
-            }}
-          >
-              Are you Employed?
-              </Text>
-            <Picker
-            selectedValue={employed1}
-            onValueChange={(value) => {
-              setEmployed1(value);
-              employed = value;
-              const updateProfileEmployed = async () => {
-                let user = await AsyncStorage.getItem(USER);
-                let theUser = JSON.parse(user);
-                let userId = theUser.res.user.id;
-                let theUserName = theUser.res.user.username;
+      <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 70}}>
 
-                console.warn(`509 this is manager ${employed}`)
-
-                  try{
-                    let userProfile = await fetch (`https://c67f-72-252-198-169.ngrok.io/api/v1/user/${userId}`,{
-                      method: 'Post',
-                      headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({
-                        user:{
-                          employed: employed,
-                        }
-                    })
-                    });
-                    console.log(`This is line 461: It Ran`)
-
-                  }catch (error) {
-                    console.log(error);
-                  }
-                };
-
-
-                if (employed !== null) {
-                  updateProfileEmployed();
-                }
-            }}
-            mode="dropdown"
-            style={styles.picker}
-          >
-            <Picker.Item label="Choose" value={null} />
-            <Picker.Item label="Yes" value={true} />
-            <Picker.Item label="No" value={false} />
-            
-          </Picker> */}
-
-
-<View>
+      <View>
           <View style={{alignItems: 'center', justifyContent: 'center'}}>
             <Text
               style={{

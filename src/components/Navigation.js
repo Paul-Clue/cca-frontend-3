@@ -18,7 +18,7 @@ import EditProfile from '../Screens/EditProfile';
 import ProfileScreen from '../Screens/ProfileScreen'
 import CaseManagerScreen from '../Screens/CaseManagerScreen';
 import CaseProfileScreen from '../Screens/CaseProfileScreen';
-import MilestoneScreen from '../Screens/MilestonesScreen'
+import MilestoneScreen from '../Screens/MilestoneScreen'
 import Browser from '../Screens/Browser';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RotateInUpLeft } from 'react-native-reanimated';
@@ -375,6 +375,7 @@ const ScreensForStack = () =>{
       <Stack.Screen name={'CaseManagerScreen'} component={CaseManagerScreen} />
       <Stack.Screen name={'CaseProfileScreen'} component={CaseProfileScreen} />
       <Stack.Screen name={'Login2'} component={Login2} options={{headerShown: false}} />
+      <Stack.Screen name={'MilestoneScreen'} component={MilestoneScreen} />
       <Stack.Screen name={'HomeScreen'} component={MyDrawer} />
       </Stack.Navigator>
       </NavigationContainer>
