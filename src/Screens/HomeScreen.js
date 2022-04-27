@@ -13,6 +13,7 @@ import Ngrok from '../util/Ngrok';
 // import Loader from 'react-native-easy-content-loader';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
+import { setUsersMeets } from '../redux/actions';
 import {
   StyleSheet,
   Text,
@@ -40,13 +41,40 @@ const USER = 'user';
 
 
  const HomeScreen = () => {
-   const [id, setId] = useState(null);
+  const [id, setId] = useState(null);
+  const [reRun, setRerun] = useState(null);
+
   const getUserInfo = async () => {
     const user1 = await AsyncStorage.getItem(USER);
     const theUser1 = JSON.parse(user1);
      setId(theUser1.res.user.id);
     };
+
     getUserInfo();
+
+    useEffect(async () => {
+      try{
+        let info = await fetch (`${Ngrok}/user/${id}`,{
+          method: 'Get',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        const userInfo = await info.json();
+        const meets = userInfo.user.meeting;
+        console.warn(meets);
+        dispatch(setUsersMeets(meets));
+        // console.log(`Meets line 54: ${storedInfoMeets}`);
+        
+    
+      }catch (error) {
+        console.log(error);
+      }
+
+      setRerun('Set');
+    }, [])
 
   const runThis = async () => {
     try{
@@ -69,7 +97,7 @@ const USER = 'user';
       console.log(error);
     }
   };
-  runThis();
+  // runThis();
 
   const checkForToken = async () => {
     try {
@@ -79,7 +107,7 @@ const USER = 'user';
       // console.log(JSON.stringify(checkUser2.res.user.user_type))
 
       if(token){
-        console.log('No Token line 122');
+        console.log('Token Exists');
       } else {
               // navigation.navigate('HomeScreen');
               navigation.navigate('Login2');

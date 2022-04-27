@@ -32,9 +32,9 @@ const USER = 'user';
 
 const ProfileScreen = () => {
   const { storedInfoMilestoneId } = useSelector(state => state.userReducer);
+  const { storedInfoMileStoneList } = useSelector(state => state.userReducer);
 
   const [isSelected, setSelection] = useState(false);
-  const { storedInfoMileStoneList } = useSelector(state => state.userReducer);
   let milestoneList2 = [];
   const [milestoneTitle, setMilestoneTitle] = useState(null);
   const [milestoneInstructions, setMilestoneInstructions] = useState(null);
@@ -408,10 +408,10 @@ const ProfileScreen = () => {
                         }}
                         key={item.id}
                         onPress={async () => {
-                          // dispatch(setCaseProfile(user.id));
+                          dispatch(setMilestoneId(item.id));
               
-                            // navigation.navigate('MilestoneScreen');
-                            console.log('Something');
+                            navigation.navigate('MilestoneScreen');
+                            // console.log('Something');
                         }}
                         
                       >

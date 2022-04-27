@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import { Camera } from 'expo-camera'
 import * as ImagePicker from 'expo-image-picker';
+import Ngrok from '../util/Ngrok';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 
 const ACCESS_TOKEN = 'access_token';
@@ -43,7 +44,7 @@ function MyDrawer2 ({progress,...props}){
     setUserEmail(theUser.res.user.email);
     
       try{
-        let img = await fetch (`https://7b55-72-252-198-169.ngrok.io/api/v1/profilepic/${userId}`,{
+        let img = await fetch (`${Ngrok}/profilepic/${userId}`,{
           method: 'Get',
           headers: {
             'Accept': 'application/json',

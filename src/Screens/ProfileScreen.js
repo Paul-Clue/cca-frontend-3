@@ -59,7 +59,7 @@ const USER = 'user';
    setId(theUser1.res.user.id);
    setMeeting(theUser1.res.user.meeting);
    setMeetingLink(theUser1.res.user.meeting_link);
-   console.log(theUser1.res.user.meeting_link);
+  //  console.log(theUser1.res.user.meeting_link);
   };
   getUserInfo();
 
@@ -71,7 +71,7 @@ const USER = 'user';
       // setHasPermission(status === 'granted');
       navigation.addListener('focus', () => {
         getUserInfo();
-        console.warn(userName);
+        // console.warn(userName);
       });
 
       if (Platform.OS !== 'web') {
@@ -140,7 +140,7 @@ const cloudinaryUpload = async (photo) => {
       let user = await AsyncStorage.getItem(USER);
       let theUser = JSON.parse(user);
       let userId = theUser.res.user.id;
-      console.log(theUser.res.user.id);
+      // console.log(theUser.res.user.id);
       try{
         fetch (`${Ngrok}/user/${userId}`,{
           method: 'Post',

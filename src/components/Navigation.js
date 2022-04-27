@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
@@ -19,12 +20,14 @@ import ProfileScreen from '../Screens/ProfileScreen'
 import CaseManagerScreen from '../Screens/CaseManagerScreen';
 import CaseProfileScreen from '../Screens/CaseProfileScreen';
 import MilestoneScreen from '../Screens/MilestoneScreen'
+import UserMilestone from '../Screens/UserMilestone'
 import Browser from '../Screens/Browser';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RotateInUpLeft } from 'react-native-reanimated';
 import { Provider } from 'react-redux';
 import { Store } from '../redux/store'
 import {setManager} from '../redux/actions'
+import { setMilestoneList } from '../redux/actions';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -211,6 +214,56 @@ function MyDrawer() {
 function MyTabs() {
   const [userType, setUserType] = useState(null);
 
+  const dispatch = useDispatch();
+
+  const { storedInfoMilestoneId } = useSelector(state => state.userReducer);
+  const { storedInfoMileStoneList } = useSelector(state => state.userReducer);
+
+  fixMilestones = async () => {
+    let user = await AsyncStorage.getItem(USER);
+    let theUser = JSON.parse(user);
+    let userId = theUser.res.user.id;
+
+    try{
+      let response = await fetch(`${Ngrok}/milestone/${userId}`, {
+        method: 'Get',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${token}`
+        },
+      });
+      // console.warn(response.text())
+      
+      let res = await response.text();
+      dispatch(setMilestoneList(res));
+      
+
+      if(response.status >= 200 && response.status < 300) {
+        // setErr('');
+        console.log('The status is 200');
+
+      }else{
+        for (let i = 10; i < res.length-2; i += 1) {
+          errors += res.charAt(i);
+        }
+        console.log('There is an error');
+
+        // console.warn(errors)
+        throw errors;
+      }
+    }
+
+    catch (errors) {
+      // console.log('errors caught: ' + errors);
+      console.log('errors caught:');
+    }
+    //DO A GET REQUST FOR MILESTONES USING THE USER ID FROM STORAGE BELOW
+    //THINK ABOUT THE API CALL LOOP THAT COMES FROM SETTING A VARIABLE AND CAUSING AN INFINITE CALL LOOP
+    //DOING A DISPATCH MIGHT NOT CAUSE THE INFINITE LOOP.
+  }
+  fixMilestones();
+
   const check = async () => {
   let token = await AsyncStorage.getItem(ACCESS_TOKEN);
   let checkUser = await AsyncStorage.getItem(USER);
@@ -276,8 +329,8 @@ function MyTabs() {
           />
 
 <Tab.Screen
-            name="MilestoneScreen"
-            component={MilestoneScreen}
+            name="UserMilestone"
+            component={UserMilestone}
             options={{
               tabBarIcon: () => (
                 <Icon name='check' color='whitesmoke'/>
@@ -291,7 +344,7 @@ function MyTabs() {
               },
               tabBarStyle: { backgroundColor: '#3B71F3' },
               headerShown: true,
-              title: 'MilestoneScreen',
+              title: 'Milestones',
 
             }}
           />
@@ -376,6 +429,7 @@ const ScreensForStack = () =>{
       <Stack.Screen name={'CaseProfileScreen'} component={CaseProfileScreen} />
       <Stack.Screen name={'Login2'} component={Login2} options={{headerShown: false}} />
       <Stack.Screen name={'MilestoneScreen'} component={MilestoneScreen} />
+      <Stack.Screen name={'UserMilestone'} component={UserMilestone} />
       <Stack.Screen name={'HomeScreen'} component={MyDrawer} />
       </Stack.Navigator>
       </NavigationContainer>
